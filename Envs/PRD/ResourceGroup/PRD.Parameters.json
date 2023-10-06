@@ -7,6 +7,9 @@
       },
       "name": {
         "value": "krushna_prd_rg"
+      },
+      "envr": {
+        "value": "PRD"
       }
     }
   }
