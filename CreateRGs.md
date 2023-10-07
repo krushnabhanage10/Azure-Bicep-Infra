@@ -2,10 +2,17 @@
 
 
 # DEV:
-Get-AzDeploymentWhatIfResult -Location centralus -TemplateFile "C:\Users\krushna.baghate\Documents\Azure-Bicep-Infra\Envs\DEV\ResourceGroup\ResourceGroup.main.bicep" -TemplateParameterFile "C:\Users\krushna.baghate\Documents\Azure-Bicep-Infra\Envs\DEV\ResourceGroup\DEV.Parameters.json"
-New-AzDeployment -Location centralus -TemplateFile "C:\Users\krushna.baghate\Documents\Azure-Bicep-Infra\Envs\DEV\ResourceGroup\ResourceGroup.main.bicep" -TemplateParameterFile "C:\Users\krushna.baghate\Documents\Azure-Bicep-Infra\Envs\DEV\ResourceGroup\DEV.Parameters.json"
+Plan:
+Get-AzDeploymentWhatIfResult -Location centralus -TemplateFile "C:\Users\krushna.baghate\Documents\Azure-Bicep-Infra\Envs\DEV\ResourceGroup\ResourceGroup.main.bicep" -TemplateParameterFile "C:\Users\krushna.baghate\Documents\Azure-Bicep-Infra\Envs\DEV\DEV.Parameters.json"
+
+Apply:
+New-AzDeployment -Location centralus -TemplateFile "C:\Users\krushna.baghate\Documents\Azure-Bicep-Infra\Envs\DEV\ResourceGroup\ResourceGroup.main.bicep" -TemplateParameterFile "C:\Users\krushna.baghate\Documents\Azure-Bicep-Infra\Envs\DEV\DEV.Parameters.json"
+
 
 
 # PRD:
-Get-AzDeploymentWhatIfResult -Location centralus -TemplateFile "C:\Users\krushna.baghate\Documents\Azure-Bicep-Infra\Envs\PRD\ResourceGroup\ResourceGroup.main.bicep" -TemplateParameterFile "C:\Users\krushna.baghate\Documents\Azure-Bicep-Infra\Envs\PRD\ResourceGroup\PRD.Parameters.json"
-New-AzDeployment -Location centralus -TemplateFile "C:\Users\krushna.baghate\Documents\Azure-Bicep-Infra\Envs\DEV\ResourceGroup\ResourceGroup.main.bicep" -TemplateParameterFile "C:\Users\krushna.baghate\Documents\Azure-Bicep-Infra\Envs\PRD\ResourceGroup\PRD.Parameters.json"
+Plan:
+Get-AzDeploymentWhatIfResult -Location centralus -TemplateFile "C:\Users\krushna.baghate\Documents\Azure-Bicep-Infra\Envs\PRD\ResourceGroup\ResourceGroup.main.bicep" -TemplateParameterFile "C:\Users\krushna.baghate\Documents\Azure-Bicep-Infra\Envs\PRD\PRD.Parameters.json"
+
+Apply:
+New-AzDeployment -Location centralus -TemplateFile "C:\Users\krushna.baghate\Documents\Azure-Bicep-Infra\Envs\DEV\ResourceGroup\ResourceGroup.main.bicep" -TemplateParameterFile "C:\Users\krushna.baghate\Documents\Azure-Bicep-Infra\Envs\PRD\PRD.Parameters.json"
