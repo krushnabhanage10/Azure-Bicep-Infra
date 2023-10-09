@@ -1,35 +1,42 @@
 pipeline {
     agent {
         docker {
-            image 'mcr.microsoft.com/azure-cli:latest'
+            image 'miqm/bicep-cli:latest
         }
-    }
-
-    environment {
-        AZURE_SERVICE_PRINCIPAL_ID = credentials('YOUR_AZURE_SP_ID')
-        AZURE_SERVICE_PRINCIPAL_PASSWORD = credentials('YOUR_AZURE_SP_PASSWORD')
-        AZURE_TENANT_ID = credentials('YOUR_AZURE_TENANT_ID')
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                // Check out your source code repository if needed
-                // For example, you can use 'git checkout' here
-                sh 'git checkout <your-git-branch>'
-            }
-        }
-
-        stage('Azure Login and Bicep Deployment') {
+        stage('Load Environment Variables') {
             steps {
                 script {
-                    def azLoginCommand = """az login --service-principal -u \${AZURE_SERVICE_PRINCIPAL_ID} -p \${AZURE_SERVICE_PRINCIPAL_PASSWORD} --tenant \${AZURE_TENANT_ID}"""
-                    def createResourceGroupCommand = "az group create --name MyResourceGroup --location eastus"
-                    def deployBicepCommand = "az deployment group create --resource-group MyResourceGroup --template-file main.bicep"
+                    def envProperties = [:]
 
-                    sh "$azLoginCommand"
-                    sh "$createResourceGroupCommand"
-                    sh "$deployBicepCommand"
+                    // Load environment variables from the file
+                    def envFile = readFile 'env.properties'
+                    envFile.readLines().each { line ->
+                        def (key, value) = line.tokenize('=').collect { it.trim() }
+                        envProperties[key] = value
+                    }
+
+                    // Set all environment variables from the file
+                    envProperties.each { key, value ->
+                        env[key] = value
+                    }
+                }
+            }
+        }
+        stage('RG Creation WhatIF and Deployment') {
+            steps {
+                dir("${workspace}"){
+                script withCredentials([azureServicePrincipal('AZ_SPN')]) {
+                    sh 'az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET -t $AZURE_TENANT_ID'}{
+                        def whatifrg = "az deployment sub what-if --location ${location} --template-file ${rgtemplatefilepath} --parameters @${parametersfilepath}"
+                        def deployrg = "az deployment sub create --location ${location} --template-file ${rgtemplatefilepath} --parameters @${parametersfilepath}
+                        sh "$azLoginCommand"
+                        sh "$whatifrg"
+                        input("Click 'Proceed' to deploy the Bicep template")
+                        sh "$deployrg"
+                    }
                 }
             }
         }
