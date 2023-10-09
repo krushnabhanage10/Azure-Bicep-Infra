@@ -32,7 +32,27 @@ pipeline {
                         def whatifrg = "az deployment sub what-if --location ${env.LOCATION} --template-file ${env.DEVRGTEMPLATEFILEPATH} --parameters ${env.DEVPARAMETERSFILEPATH}"
                         def deployrg = "az deployment sub create --location ${env.LOCATION} --template-file ${env.DEVRGTEMPLATEFILEPATH} --parameters ${env.DEVPARAMETERSFILEPATH}"
                         sh "$whatifrg"
-                        input("Click 'Proceed' to deploy the Bicep template")
+                        script {
+                            def approved = false
+                            timeout(time: 30, unit: 'MINUTES') {
+                                while (!approved) {
+                                    def approval = input(
+                                        message: 'Do you approve Stage ${env.STAGE_NAME}?',
+                                        ok: 'Proceed',
+                                        submitter: 'krushna', // List of users who can approve
+                                        parameters: [choice(choices: ['Yes', 'No'], description: 'Approval', name: 'APPROVAL')]
+                                    )
+
+                                    if (approval == 'Yes') {
+                                        approved = true
+                                        echo 'Stage ${env.STAGE_NAME} approved, proceeding to Stage 3'
+                                    } else {
+                                        echo 'Stage ${env.STAGE_NAME} approval denied, waiting for approval...'
+                                        sleep(30) // Wait for 30 seconds before checking again (adjust as needed)
+                                    }
+                                }
+                            }
+                        }
                         sh "$deployrg"
                     }
                     }
@@ -46,7 +66,27 @@ pipeline {
                         def whatifrg = "az deployment sub what-if --location ${env.LOCATION} --template-file ${env.PRDRGTEMPLATEFILEPATH} --parameters ${env.PRDPARAMETERSFILEPATH}"
                         def deployrg = "az deployment sub create --location ${env.LOCATION} --template-file ${env.PRDRGTEMPLATEFILEPATH} --parameters ${env.PRDPARAMETERSFILEPATH}"
                         sh "$whatifrg"
-                        input("Click 'Proceed' to deploy the Bicep template")
+                        script {
+                            def approved = false
+                            timeout(time: 30, unit: 'MINUTES') {
+                                while (!approved) {
+                                    def approval = input(
+                                        message: 'Do you approve Stage ${env.STAGE_NAME}?',
+                                        ok: 'Proceed',
+                                        submitter: 'krushna', // List of users who can approve
+                                        parameters: [choice(choices: ['Yes', 'No'], description: 'Approval', name: 'APPROVAL')]
+                                    )
+
+                                    if (approval == 'Yes') {
+                                        approved = true
+                                        echo 'Stage ${env.STAGE_NAME} approved, proceeding to Stage 3'
+                                    } else {
+                                        echo 'Stage ${env.STAGE_NAME} approval denied, waiting for approval...'
+                                        sleep(30) // Wait for 30 seconds before checking again (adjust as needed)
+                                    }
+                                }
+                            }
+                        }
                         sh "$deployrg"
                     }
                     }
