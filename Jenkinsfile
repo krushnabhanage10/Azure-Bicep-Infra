@@ -2,6 +2,7 @@ pipeline {
     agent {
         docker {
             image 'krushnabhanage10/jnlp-slave:latest'
+            args "--user root --privileged"
         }
     }
     environment {
