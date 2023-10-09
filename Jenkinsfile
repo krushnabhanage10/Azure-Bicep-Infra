@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'miqm/bicep-cli:latest
+            image 'miqm/bicep-cli:latest'
         }
     }
 
