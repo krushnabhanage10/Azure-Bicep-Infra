@@ -37,7 +37,7 @@ pipeline {
                         }
                     }
                 }
-                if (DeployTo == 'DEV') {
+                else if (DeployTo == 'DEV') {
                     stage('DEV RG Creation WhatIF and Deployment') {
                         steps {
                             dir("${workspace}"){
@@ -76,9 +76,9 @@ pipeline {
                         }
                     }
                 }
-                if (DeployTo == 'PRD') {
+                else if (DeployTo == 'PRD') {
                     stage('PRD RG Creation WhatIF and Deployment') {
-                        steps {
+                        steps{
                             dir("${workspace}"){
                                 script{
                                     sh 'az login --service-principal -u $AZ_CRED_CLIENT_ID -p $AZ_CRED_CLIENT_SECRET -t $AZ_CRED_TENANT_ID'
