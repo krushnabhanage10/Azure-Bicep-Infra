@@ -37,7 +37,6 @@ pipeline {
                     }
                     }
                 }
-            }
         }
         stage('PRD RG Creation WhatIF and Deployment') {
             steps {
