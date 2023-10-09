@@ -4,7 +4,6 @@ pipeline {
             image 'miqm/bicep-cli:latest'
         }
     }
-
     stages {
         stage('Load Environment Variables') {
             steps {
