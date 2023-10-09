@@ -30,7 +30,7 @@ pipeline {
                 script withCredentials([azureServicePrincipal('AZ_SPN')]) {
                     sh 'az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET -t $AZURE_TENANT_ID'}{
                         def whatifrg = "az deployment sub what-if --location ${location} --template-file ${rgtemplatefilepath} --parameters @${parametersfilepath}"
-                        def deployrg = "az deployment sub create --location ${location} --template-file ${rgtemplatefilepath} --parameters @${parametersfilepath}
+                        def deployrg = "az deployment sub create --location ${location} --template-file ${rgtemplatefilepath} --parameters @${parametersfilepath}"
                         sh "$azLoginCommand"
                         sh "$whatifrg"
                         input("Click 'Proceed' to deploy the Bicep template")
