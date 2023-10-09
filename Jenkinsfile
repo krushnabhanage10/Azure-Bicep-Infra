@@ -41,7 +41,8 @@ pipeline {
         stage('DEV RG Creation WhatIF and Deployment') {
             steps {
                 dir("${workspace}"){
-                    script{
+                    if (DeployTo == 'DEV') {
+                        script{
                         sh 'az login --service-principal -u $AZ_CRED_CLIENT_ID -p $AZ_CRED_CLIENT_SECRET -t $AZ_CRED_TENANT_ID'
                         def whatifrg = "az deployment sub what-if --location ${env.LOCATION} --template-file ${env.DEVRGTEMPLATEFILEPATH} --parameters ${env.DEVPARAMETERSFILEPATH}"
                         def deployrg = "az deployment sub create --location ${env.LOCATION} --template-file ${env.DEVRGTEMPLATEFILEPATH} --parameters ${env.DEVPARAMETERSFILEPATH}"
@@ -70,6 +71,7 @@ pipeline {
                                     }
                                 }
                             }
+                        }
                         }
                     }
                 }
@@ -124,3 +126,10 @@ pipeline {
     }
 }
  
+
+
+if (condition) {
+    onIf
+} else {
+    onElse
+}
