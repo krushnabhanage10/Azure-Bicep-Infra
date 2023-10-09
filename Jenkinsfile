@@ -37,7 +37,7 @@ pipeline {
                             timeout(time: 30, unit: 'MINUTES') {
                                 while (!approved) {
                                     def approval = input(
-                                        message: 'Do you approve Stage ${env.STAGE_NAME}?',
+                                        message: "Do you approve Stage ${env.STAGE_NAME}?",
                                         ok: 'Proceed',
                                         submitter: 'krushna', // List of users who can approve
                                         parameters: [choice(choices: ['Yes', 'No'], description: 'Approval', name: 'APPROVAL')]
@@ -45,9 +45,12 @@ pipeline {
 
                                     if (approval == 'Yes') {
                                         approved = true
-                                        echo 'Stage ${env.STAGE_NAME} approved, proceeding to Stage 3'
+                                        echo "Stage ${env.STAGE_NAME} approved, proceeding to Stage 3"
+                                    } else if (approval == 'No') {
+                                        echo "Stage ${env.STAGE_NAME} approval denied, proceeding to the next stage"
+                                        approved = true // Set approved to true to exit the loop
                                     } else {
-                                        echo 'Stage ${env.STAGE_NAME} approval denied, waiting for approval...'
+                                        echo "Invalid response. Please select 'Yes' or 'No'."
                                         sleep(30) // Wait for 30 seconds before checking again (adjust as needed)
                                     }
                                 }
@@ -71,7 +74,7 @@ pipeline {
                             timeout(time: 30, unit: 'MINUTES') {
                                 while (!approved) {
                                     def approval = input(
-                                        message: 'Do you approve Stage ${env.STAGE_NAME}?',
+                                        message: "Do you approve Stage ${env.STAGE_NAME}?",
                                         ok: 'Proceed',
                                         submitter: 'krushna', // List of users who can approve
                                         parameters: [choice(choices: ['Yes', 'No'], description: 'Approval', name: 'APPROVAL')]
@@ -79,9 +82,12 @@ pipeline {
 
                                     if (approval == 'Yes') {
                                         approved = true
-                                        echo 'Stage ${env.STAGE_NAME} approved, proceeding to Stage 3'
+                                        echo "Stage ${env.STAGE_NAME} approved, proceeding to Stage 3"
+                                    } else if (approval == 'No') {
+                                        echo "Stage ${env.STAGE_NAME} approval denied, proceeding to the next stage"
+                                        approved = true // Set approved to true to exit the loop
                                     } else {
-                                        echo 'Stage ${env.STAGE_NAME} approval denied, waiting for approval...'
+                                        echo "Invalid response. Please select 'Yes' or 'No'."
                                         sleep(30) // Wait for 30 seconds before checking again (adjust as needed)
                                     }
                                 }
