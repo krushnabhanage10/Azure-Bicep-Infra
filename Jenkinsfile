@@ -31,8 +31,8 @@ pipeline {
             steps {
                 dir("${workspace}"){
                     sh 'az login --service-principal -u $AZ_CRED_CLIENT_ID -p $AZ_CRED_CLIENT_SECRET -t $AZ_CRED_TENANT_ID'
-                    def whatifrg = "az deployment sub what-if --location ${location} --template-file ${rgtemplatefilepath} --parameters @${parametersfilepath}"
-                    def deployrg = "az deployment sub create --location ${location} --template-file ${rgtemplatefilepath} --parameters @${parametersfilepath}"
+                    def whatifrg = "az deployment sub what-if --location ${location} --template-file ${rgtemplatefilepath} --parameters ${parametersfilepath}"
+                    def deployrg = "az deployment sub create --location ${location} --template-file ${rgtemplatefilepath} --parameters ${parametersfilepath}"
                     sh "$whatifrg"
                     input("Click 'Proceed' to deploy the Bicep template")
                     sh "$deployrg"
