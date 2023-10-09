@@ -20,7 +20,6 @@ pipeline {
                         parameters: [choice(choices: ['DEV', 'PRD'], description: 'Approval', name: 'DeployTo')]
                     )
                 echo "Selected Env is : $DeployTo"
-                def DeployToList = DeployTo.split(',')
 
                 stage('Load Environment Variables') {
                     steps {
@@ -76,7 +75,7 @@ pipeline {
                         }
                     }
                 }
-                else if ( DeployTo == 'PRD') {
+                if ( DeployTo == 'PRD') {
                     stage('PRD RG Creation WhatIF and Deployment') {
                         steps{
                             dir("${workspace}"){
