@@ -17,8 +17,6 @@ pipeline {
                         def (key, value) = line.tokenize('=').collect { it.trim() }
                         envProperties[key] = value
                     }
-
-                    // Set all environment variables from the file
                     envProperties.each { key, value ->
                         env[key] = value
                     }
