@@ -4,6 +4,9 @@ pipeline {
             image 'miqm/bicep-cli:latest'
         }
     }
+    environment {
+    AZ_CRED = credentials('AZ_SPN')
+    }
     stages {
         stage('Load Environment Variables') {
             steps {
@@ -27,15 +30,13 @@ pipeline {
         stage('RG Creation WhatIF and Deployment') {
             steps {
                 dir("${workspace}"){
-                script withCredentials([azureServicePrincipal('AZ_SPN')]) {
-                    sh 'az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET -t $AZURE_TENANT_ID'}{
-                        def whatifrg = "az deployment sub what-if --location ${location} --template-file ${rgtemplatefilepath} --parameters @${parametersfilepath}"
-                        def deployrg = "az deployment sub create --location ${location} --template-file ${rgtemplatefilepath} --parameters @${parametersfilepath}"
-                        sh "$azLoginCommand"
-                        sh "$whatifrg"
-                        input("Click 'Proceed' to deploy the Bicep template")
-                        sh "$deployrg"
-                    }
+                script{
+                    sh 'az login --service-principal -u $AZ_CRED_CLIENT_ID -p $AZ_CRED_CLIENT_SECRET -t $AZ_CRED_TENANT_ID'
+                    def whatifrg = "az deployment sub what-if --location ${location} --template-file ${rgtemplatefilepath} --parameters @${parametersfilepath}"
+                    def deployrg = "az deployment sub create --location ${location} --template-file ${rgtemplatefilepath} --parameters @${parametersfilepath}"
+                    sh "$whatifrg"
+                    input("Click 'Proceed' to deploy the Bicep template")
+                    sh "$deployrg"
                 }
             }
         }
@@ -47,10 +48,6 @@ pipeline {
                 attachLog: true,
                 to: 'krushna.bhanage@outlook.com',
                 subject: "Status of pipeline - ${currentBuild.fullDisplayName}:${currentBuild.result}"             
-            // Clean up resources, log out of Azure CLI if necessary
-            script {
-                sh 'az logout'
-            }
         }
     }
 }
