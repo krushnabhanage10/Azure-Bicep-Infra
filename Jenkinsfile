@@ -38,6 +38,7 @@ pipeline {
                 }
                 if (DeployTo == 'DEV') {
                     stage('DEV RG Creation WhatIF and Deployment') {
+                        approved = true
                         steps {
                             dir("${workspace}"){
                                 script{
