@@ -37,7 +37,7 @@ pipeline {
                         }
                     }
                 }
-                else if (DeployTo == 'DEV') {
+                else if ( DeployTo == 'DEV') {
                     stage('DEV RG Creation WhatIF and Deployment') {
                         steps {
                             dir("${workspace}"){
@@ -76,7 +76,7 @@ pipeline {
                         }
                     }
                 }
-                else if (DeployTo == 'PRD') {
+                else if ( DeployTo == 'PRD') {
                     stage('PRD RG Creation WhatIF and Deployment') {
                         steps{
                             dir("${workspace}"){
