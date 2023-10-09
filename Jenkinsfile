@@ -45,7 +45,8 @@ pipeline {
 
                                     if (approval == 'Yes') {
                                         approved = true
-                                        echo "Stage ${env.STAGE_NAME} approved, proceeding to Stage 3"
+                                        echo "Stage ${env.STAGE_NAME} approved, proceeding to Stage ${env.STAGE_NAME}"
+                                        sh "$deployrg"
                                     } else if (approval == 'No') {
                                         echo "Stage ${env.STAGE_NAME} approval denied, proceeding to the next stage"
                                         approved = true // Set approved to true to exit the loop
@@ -56,7 +57,6 @@ pipeline {
                                 }
                             }
                         }
-                        sh "$deployrg"
                     }
                     }
                 }
@@ -82,7 +82,8 @@ pipeline {
 
                                     if (approval == 'Yes') {
                                         approved = true
-                                        echo "Stage ${env.STAGE_NAME} approved, proceeding to Stage 3"
+                                        echo "Stage ${env.STAGE_NAME} approved, proceeding to Stage ${env.STAGE_NAME}"
+                                        sh "$deployrg"
                                     } else if (approval == 'No') {
                                         echo "Stage ${env.STAGE_NAME} approval denied, proceeding to the next stage"
                                         approved = true // Set approved to true to exit the loop
@@ -93,7 +94,6 @@ pipeline {
                                 }
                             }
                         }
-                        sh "$deployrg"
                     }
                     }
                 }
