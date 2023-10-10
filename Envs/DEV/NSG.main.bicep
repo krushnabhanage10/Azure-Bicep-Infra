@@ -43,7 +43,7 @@ var nsgconfigs = [
         ]
     }
     {
-        name: 'dev_nsg_vms'
+        name: 'dev_nsg_k8s'
         securityrules : [
             {
                 name: 'Allow_K8S_TLS_Port'
