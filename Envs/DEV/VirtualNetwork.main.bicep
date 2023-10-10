@@ -22,13 +22,13 @@ var nwconfigs = [
       {
         name: 'dev_subnet_db_mongo'
         properties: {
-          addressPrefix: '10.0.3.0/24'
+          addressPrefix: '10.0.2.0/24'
         }
       }
       {
         name: 'dev_subnet_app_connections'
         properties: {
-          addressPrefix: '10.0.4.0/24'
+          addressPrefix: '10.0.3.0/24'
         }
       }
     ]
