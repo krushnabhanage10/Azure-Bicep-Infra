@@ -113,7 +113,6 @@ pipeline {
             }
         }
     }
-
     post {
         always {
             emailext body: "The build URL :${env.BUILD_URL} has result ${currentBuild.result}",
