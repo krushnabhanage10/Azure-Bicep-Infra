@@ -121,9 +121,9 @@ pipeline {
             steps {
                 dir("${workspace}"){
                     script{
-                        def whatifrg = "az deployment sub what-if --location ${env.LOCATION} --template-file ${env.DEVNWTEMPLATEFILEPATH} --parameters ${env.DEVPARAMETERSFILEPATH}"
-                        def deployrg = "az deployment sub create --location ${env.LOCATION} --template-file ${env.DEVNWTEMPLATEFILEPATH} --parameters ${env.DEVPARAMETERSFILEPATH}"
-                        sh "$whatifrg"
+                        def whatifnw = "az deployment group what-if --location ${env.LOCATION} --template-file ${env.DEVNWTEMPLATEFILEPATH} --parameters ${env.DEVPARAMETERSFILEPATH}"
+                        def deploynw = "az deployment group create --location ${env.LOCATION} --template-file ${env.DEVNWTEMPLATEFILEPATH} --parameters ${env.DEVPARAMETERSFILEPATH}"
+                        sh "$whatifnw"
                         script {
                             def approved = false
                             timeout(time: 30, unit: 'MINUTES') {
@@ -138,7 +138,7 @@ pipeline {
                                     if (approval == 'Yes') {
                                         approved = true
                                         echo "Stage ${env.STAGE_NAME} approved, proceeding to Stage ${env.STAGE_NAME}"
-                                        sh "$deployrg"
+                                        sh "$deploynw"
                                     } else if (approval == 'No') {
                                         echo "Stage ${env.STAGE_NAME} approval denied, proceeding to the next stage"
                                         approved = true // Set approved to true to exit the loop
@@ -157,9 +157,9 @@ pipeline {
             steps{
                 dir("${workspace}"){
                     script{
-                        def whatifrg = "az deployment sub what-if --location ${env.LOCATION} --template-file ${env.PRDNWTEMPLATEFILEPATH} --parameters ${env.PRDPARAMETERSFILEPATH}"
-                        def deployrg = "az deployment sub create --location ${env.LOCATION} --template-file ${env.PRDNWTEMPLATEFILEPATH} --parameters ${env.PRDPARAMETERSFILEPATH}"
-                        sh "$whatifrg"
+                        def whatifnw = "az deployment group what-if --location ${env.LOCATION} --template-file ${env.PRDNWTEMPLATEFILEPATH} --parameters ${env.PRDPARAMETERSFILEPATH}"
+                        def deploynw = "az deployment group create --location ${env.LOCATION} --template-file ${env.PRDNWTEMPLATEFILEPATH} --parameters ${env.PRDPARAMETERSFILEPATH}"
+                        sh "$whatifnw"
                         script {
                             def approved = false
                             timeout(time: 30, unit: 'MINUTES') {
@@ -174,7 +174,7 @@ pipeline {
                                     if (approval == 'Yes') {
                                         approved = true
                                         echo "Stage ${env.STAGE_NAME} approved, proceeding to Stage ${env.STAGE_NAME}"
-                                        sh "$deployrg"
+                                        sh "$deploynw"
                                     } else if (approval == 'No') {
                                         echo "Stage ${env.STAGE_NAME} approval denied, proceeding to the next stage"
                                         approved = true // Set approved to true to exit the loop
@@ -193,9 +193,9 @@ pipeline {
             steps {
                 dir("${workspace}"){
                     script{
-                        def whatifrg = "az deployment sub what-if --location ${env.LOCATION} --template-file ${env.DEVNSGTEMPLATEFILEPATH} --parameters ${env.DEVPARAMETERSFILEPATH}"
-                        def deployrg = "az deployment sub create --location ${env.LOCATION} --template-file ${env.DEVNSGTEMPLATEFILEPATH} --parameters ${env.DEVPARAMETERSFILEPATH}"
-                        sh "$whatifrg"
+                        def whatifnsg = "az deployment group what-if --location ${env.LOCATION} --template-file ${env.DEVNSGTEMPLATEFILEPATH} --parameters ${env.DEVPARAMETERSFILEPATH}"
+                        def deploynsg = "az deployment group create --location ${env.LOCATION} --template-file ${env.DEVNSGTEMPLATEFILEPATH} --parameters ${env.DEVPARAMETERSFILEPATH}"
+                        sh "$whatifnsg"
                         script {
                             def approved = false
                             timeout(time: 30, unit: 'MINUTES') {
@@ -210,7 +210,7 @@ pipeline {
                                     if (approval == 'Yes') {
                                         approved = true
                                         echo "Stage ${env.STAGE_NAME} approved, proceeding to Stage ${env.STAGE_NAME}"
-                                        sh "$deployrg"
+                                        sh "$deploynsg"
                                     } else if (approval == 'No') {
                                         echo "Stage ${env.STAGE_NAME} approval denied, proceeding to the next stage"
                                         approved = true // Set approved to true to exit the loop
@@ -229,9 +229,9 @@ pipeline {
             steps{
                 dir("${workspace}"){
                     script{
-                        def whatifrg = "az deployment sub what-if --location ${env.LOCATION} --template-file ${env.PRDNSGTEMPLATEFILEPATH} --parameters ${env.PRDPARAMETERSFILEPATH}"
-                        def deployrg = "az deployment sub create --location ${env.LOCATION} --template-file ${env.PRDNSGTEMPLATEFILEPATH} --parameters ${env.PRDPARAMETERSFILEPATH}"
-                        sh "$whatifrg"
+                        def whatifnsg = "az deployment group what-if --location ${env.LOCATION} --template-file ${env.PRDNSGTEMPLATEFILEPATH} --parameters ${env.PRDPARAMETERSFILEPATH}"
+                        def deploynsg = "az deployment group create --location ${env.LOCATION} --template-file ${env.PRDNSGTEMPLATEFILEPATH} --parameters ${env.PRDPARAMETERSFILEPATH}"
+                        sh "$whatifnsg"
                         script {
                             def approved = false
                             timeout(time: 30, unit: 'MINUTES') {
@@ -246,7 +246,7 @@ pipeline {
                                     if (approval == 'Yes') {
                                         approved = true
                                         echo "Stage ${env.STAGE_NAME} approved, proceeding to Stage ${env.STAGE_NAME}"
-                                        sh "$deployrg"
+                                        sh "$deploynsg"
                                     } else if (approval == 'No') {
                                         echo "Stage ${env.STAGE_NAME} approval denied, proceeding to the next stage"
                                         approved = true // Set approved to true to exit the loop
