@@ -4,37 +4,61 @@ param envr string
 
 var nwconfigs = [
   {
-    name: 'prd_app_vnet'
-    vnetaddressprefix : [ '11.0.0.0/21' ]
+    name: 'dev_app_vnet'
+    vnetaddressprefix : [ '11.0.0.0/22' ]
     subnets: [
       {
-        name: 'prd_subnet_app'
+        name: 'dev_subnet_app'
         properties: {
-          addressPrefix: '11.0.0.0/22'
+          addressPrefix: '11.0.0.0/24'
         }
       }
       {
-        name: 'prd_subnet_db'
+        name: 'dev_subnet_db_sql'
         properties: {
-          addressPrefix: '11.0.4.0/22'
+          addressPrefix: '11.0.1.0/24'
+        }
+      }
+      {
+        name: 'dev_subnet_db_mongo'
+        properties: {
+          addressPrefix: '11.0.2.0/24'
+        }
+      }
+      {
+        name: 'dev_subnet_app_connections'
+        properties: {
+          addressPrefix: '11.0.3.0/24'
         }
       }
     ]
   }
   {
-    name: 'prd_infra_vnet'
-    vnetaddressprefix : [ '11.0.8.0/21' ]
+    name: 'dev_infra_vnet'
+    vnetaddressprefix : [ '11.0.4.0/22' ]
     subnets: [
       {
-        name: 'prd_subnet_iaas'
+        name: 'dev_subnet_iaas'
         properties: {
-          addressPrefix: '11.0.8.0/22'
+          addressPrefix: '11.0.4.0/24'
         }
       }
       {
-        name: 'prd_subnet_paas'
+        name: 'dev_subnet_paas'
         properties: {
-          addressPrefix: '11.0.12.0/22'
+          addressPrefix: '11.0.5.0/24'
+        }
+      }
+      {
+        name: 'dev_subnet_k8s'
+        properties: {
+          addressPrefix: '11.0.6.0/24'
+        }
+      }
+      {
+        name: 'dev_subnet_infra_connections'
+        properties: {
+          addressPrefix: '11.0.7.0/24'
         }
       }
     ]
