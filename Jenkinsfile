@@ -122,11 +122,3 @@ pipeline {
         }
     }
 }
- 
-
-
-if (condition) {
-    onIf
-} else {
-    onElse
-}
