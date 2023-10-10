@@ -121,8 +121,8 @@ pipeline {
             steps {
                 dir("${workspace}"){
                     script{
-                        def whatifnw = "az deployment group what-if --location ${env.LOCATION} --template-file ${env.DEVNWTEMPLATEFILEPATH} --parameters ${env.DEVPARAMETERSFILEPATH}"
-                        def deploynw = "az deployment group create --location ${env.LOCATION} --template-file ${env.DEVNWTEMPLATEFILEPATH} --parameters ${env.DEVPARAMETERSFILEPATH}"
+                        def whatifnw = "az deployment group what-if --resource-group krushna_dev_rg --location ${env.LOCATION} --template-file ${env.DEVNWTEMPLATEFILEPATH} --parameters ${env.DEVPARAMETERSFILEPATH}"
+                        def deploynw = "az deployment group create --resource-group krushna_dev_rg --location ${env.LOCATION} --template-file ${env.DEVNWTEMPLATEFILEPATH} --parameters ${env.DEVPARAMETERSFILEPATH}"
                         sh "$whatifnw"
                         script {
                             def approved = false
@@ -157,8 +157,8 @@ pipeline {
             steps{
                 dir("${workspace}"){
                     script{
-                        def whatifnw = "az deployment group what-if --location ${env.LOCATION} --template-file ${env.PRDNWTEMPLATEFILEPATH} --parameters ${env.PRDPARAMETERSFILEPATH}"
-                        def deploynw = "az deployment group create --location ${env.LOCATION} --template-file ${env.PRDNWTEMPLATEFILEPATH} --parameters ${env.PRDPARAMETERSFILEPATH}"
+                        def whatifnw = "az deployment group what-if --resource-group krushna_prd_rg --location ${env.LOCATION} --template-file ${env.PRDNWTEMPLATEFILEPATH} --parameters ${env.PRDPARAMETERSFILEPATH}"
+                        def deploynw = "az deployment group create --resource-group krushna_prd_rg --location ${env.LOCATION} --template-file ${env.PRDNWTEMPLATEFILEPATH} --parameters ${env.PRDPARAMETERSFILEPATH}"
                         sh "$whatifnw"
                         script {
                             def approved = false
@@ -193,8 +193,8 @@ pipeline {
             steps {
                 dir("${workspace}"){
                     script{
-                        def whatifnsg = "az deployment group what-if --location ${env.LOCATION} --template-file ${env.DEVNSGTEMPLATEFILEPATH} --parameters ${env.DEVPARAMETERSFILEPATH}"
-                        def deploynsg = "az deployment group create --location ${env.LOCATION} --template-file ${env.DEVNSGTEMPLATEFILEPATH} --parameters ${env.DEVPARAMETERSFILEPATH}"
+                        def whatifnsg = "az deployment group what-if --resource-group krushna_dev_rg --location ${env.LOCATION} --template-file ${env.DEVNSGTEMPLATEFILEPATH} --parameters ${env.DEVPARAMETERSFILEPATH}"
+                        def deploynsg = "az deployment group create --resource-group krushna_dev_rg --location ${env.LOCATION} --template-file ${env.DEVNSGTEMPLATEFILEPATH} --parameters ${env.DEVPARAMETERSFILEPATH}"
                         sh "$whatifnsg"
                         script {
                             def approved = false
@@ -229,8 +229,8 @@ pipeline {
             steps{
                 dir("${workspace}"){
                     script{
-                        def whatifnsg = "az deployment group what-if --location ${env.LOCATION} --template-file ${env.PRDNSGTEMPLATEFILEPATH} --parameters ${env.PRDPARAMETERSFILEPATH}"
-                        def deploynsg = "az deployment group create --location ${env.LOCATION} --template-file ${env.PRDNSGTEMPLATEFILEPATH} --parameters ${env.PRDPARAMETERSFILEPATH}"
+                        def whatifnsg = "az deployment group what-if --resource-group krushna_prd_rg --location ${env.LOCATION} --template-file ${env.PRDNSGTEMPLATEFILEPATH} --parameters ${env.PRDPARAMETERSFILEPATH}"
+                        def deploynsg = "az deployment group create --resource-group krushna_prd_rg --location ${env.LOCATION} --template-file ${env.PRDNSGTEMPLATEFILEPATH} --parameters ${env.PRDPARAMETERSFILEPATH}"
                         sh "$whatifnsg"
                         script {
                             def approved = false
