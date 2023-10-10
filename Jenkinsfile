@@ -40,7 +40,9 @@ pipeline {
         }
         stage('Logging In to Azure'){
             steps{
-                sh 'az login --service-principal -u $AZ_CRED_CLIENT_ID -p $AZ_CRED_CLIENT_SECRET -t $AZ_CRED_TENANT_ID'
+                script{
+                    sh 'az login --service-principal -u $AZ_CRED_CLIENT_ID -p $AZ_CRED_CLIENT_SECRET -t $AZ_CRED_TENANT_ID'
+                }
             }
         }
         stage('DEV RG Creation WhatIF and Deployment') {
