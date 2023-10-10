@@ -261,6 +261,83 @@ pipeline {
                 }
             }
         }
+
+
+
+
+
+        stage('DEV RouteTable Creation WhatIF and Deployment') {
+            steps {
+                dir("${workspace}"){
+                    script{
+                        def whatifrt = "az deployment group what-if --resource-group krushna_dev_rg --template-file ${env.DEVRTTEMPLATEFILEPATH} --parameters ${env.DEVPARAMETERSFILEPATH}"
+                        def deployrt = "az deployment group create --resource-group krushna_dev_rg --template-file ${env.DEVRTTEMPLATEFILEPATH} --parameters ${env.DEVPARAMETERSFILEPATH}"
+                        sh "$whatifrt"
+                        script {
+                            def approved = false
+                            timeout(time: 30, unit: 'MINUTES') {
+                                while (!approved) {
+                                    def approval = input(
+                                        message: "Do you approve Stage ${env.STAGE_NAME}?",
+                                        ok: 'Proceed',
+                                        submitter: 'krushna', // List of users who can approve
+                                        parameters: [choice(choices: ['Yes', 'No'], description: 'Approval', name: 'APPROVAL')]
+                                    )
+
+                                    if (approval == 'Yes') {
+                                        approved = true
+                                        echo "Stage ${env.STAGE_NAME} approved, proceeding to Stage ${env.STAGE_NAME}"
+                                        sh "$deployrt"
+                                    } else if (approval == 'No') {
+                                        echo "Stage ${env.STAGE_NAME} approval denied, proceeding to the next stage"
+                                        approved = true // Set approved to true to exit the loop
+                                    } else {
+                                        echo "Invalid response. Please select 'Yes' or 'No'."
+                                        sleep(30) // Wait for 30 seconds before checking again (adjust as needed)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        stage('PRD RouteTable Creation WhatIF and Deployment') {
+            steps{
+                dir("${workspace}"){
+                    script{
+                        def whatifrt = "az deployment group what-if --resource-group krushna_prd_rg --template-file ${env.PRDRTTEMPLATEFILEPATH} --parameters ${env.PRDPARAMETERSFILEPATH}"
+                        def deployrt = "az deployment group create --resource-group krushna_prd_rg --template-file ${env.PRDRTTEMPLATEFILEPATH} --parameters ${env.PRDPARAMETERSFILEPATH}"
+                        sh "$whatifrt"
+                        script {
+                            def approved = false
+                            timeout(time: 30, unit: 'MINUTES') {
+                                while (!approved) {
+                                    def approval = input(
+                                        message: "Do you approve Stage ${env.STAGE_NAME}?",
+                                        ok: 'Proceed',
+                                        submitter: 'krushna', // List of users who can approve
+                                        parameters: [choice(choices: ['Yes', 'No'], description: 'Approval', name: 'APPROVAL')]
+                                    )
+
+                                    if (approval == 'Yes') {
+                                        approved = true
+                                        echo "Stage ${env.STAGE_NAME} approved, proceeding to Stage ${env.STAGE_NAME}"
+                                        sh "$deployrt"
+                                    } else if (approval == 'No') {
+                                        echo "Stage ${env.STAGE_NAME} approval denied, proceeding to the next stage"
+                                        approved = true // Set approved to true to exit the loop
+                                    } else {
+                                        echo "Invalid response. Please select 'Yes' or 'No'."
+                                        sleep(30) // Wait for 30 seconds before checking again (adjust as needed)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
     post {
         always {
