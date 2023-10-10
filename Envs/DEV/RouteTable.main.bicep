@@ -9,7 +9,7 @@ var rtconfigs = [
     disableBgpRoutePropagation: false 
     routes: [
       {
-        name : 'dev_paas_route'
+        name : 'dev_iaas_route'
         addressPrefix: '0.0.0.0/0'
         hasBgpOverride: false
         nextHopIpAddress: '0.0.0.0'
@@ -18,7 +18,7 @@ var rtconfigs = [
     ]
   }
   {
-    name: 'dev_iaas_rt'
+    name: 'dev_paas_rt'
     disableBgpRoutePropagation: false 
     routes: [
       {
@@ -35,7 +35,7 @@ var rtconfigs = [
 
 
 module rt '../../Modules/RouteTable/RouteTable.bicep' = [ for rtconfig in rtconfigs : {
-  name: name
+  name: rtconfig.name
   params:{
     name:  rtconfig.name
     location: location
