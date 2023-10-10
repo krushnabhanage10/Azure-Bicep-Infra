@@ -38,11 +38,15 @@ pipeline {
                 }
             }
         }
+        stage('Logging In to Azure'){
+            steps{
+                sh 'az login --service-principal -u $AZ_CRED_CLIENT_ID -p $AZ_CRED_CLIENT_SECRET -t $AZ_CRED_TENANT_ID'
+            }
+        }
         stage('DEV RG Creation WhatIF and Deployment') {
             steps {
                 dir("${workspace}"){
                     script{
-                        sh 'az login --service-principal -u $AZ_CRED_CLIENT_ID -p $AZ_CRED_CLIENT_SECRET -t $AZ_CRED_TENANT_ID'
                         def whatifrg = "az deployment sub what-if --location ${env.LOCATION} --template-file ${env.DEVRGTEMPLATEFILEPATH} --parameters ${env.DEVPARAMETERSFILEPATH}"
                         def deployrg = "az deployment sub create --location ${env.LOCATION} --template-file ${env.DEVRGTEMPLATEFILEPATH} --parameters ${env.DEVPARAMETERSFILEPATH}"
                         sh "$whatifrg"
@@ -79,7 +83,6 @@ pipeline {
             steps{
                 dir("${workspace}"){
                     script{
-                        sh 'az login --service-principal -u $AZ_CRED_CLIENT_ID -p $AZ_CRED_CLIENT_SECRET -t $AZ_CRED_TENANT_ID'
                         def whatifrg = "az deployment sub what-if --location ${env.LOCATION} --template-file ${env.PRDRGTEMPLATEFILEPATH} --parameters ${env.PRDPARAMETERSFILEPATH}"
                         def deployrg = "az deployment sub create --location ${env.LOCATION} --template-file ${env.PRDRGTEMPLATEFILEPATH} --parameters ${env.PRDPARAMETERSFILEPATH}"
                         sh "$whatifrg"
