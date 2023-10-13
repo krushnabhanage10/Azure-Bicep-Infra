@@ -261,11 +261,6 @@ pipeline {
                 }
             }
         }
-
-
-
-
-
         stage('DEV RouteTable Creation WhatIF and Deployment') {
             steps {
                 dir("${workspace}"){
@@ -324,6 +319,78 @@ pipeline {
                                         approved = true
                                         echo "Stage ${env.STAGE_NAME} approved, proceeding to Stage ${env.STAGE_NAME}"
                                         sh "$deployrt"
+                                    } else if (approval == 'No') {
+                                        echo "Stage ${env.STAGE_NAME} approval denied, proceeding to the next stage"
+                                        approved = true // Set approved to true to exit the loop
+                                    } else {
+                                        echo "Invalid response. Please select 'Yes' or 'No'."
+                                        sleep(30) // Wait for 30 seconds before checking again (adjust as needed)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        stage('DEV AKS Creation WhatIF and Deployment') {
+            steps {
+                dir("${workspace}"){
+                    script{
+                        def whatifaks = "az deployment group what-if --resource-group krushna_dev_rg --template-file ${env.DEVAKSTEMPLATEFILEPATH} --parameters ${env.DEVPARAMETERSFILEPATH}"
+                        def deployaks = "az deployment group create --resource-group krushna_dev_rg --template-file ${env.DEVAKSTEMPLATEFILEPATH} --parameters ${env.DEVPARAMETERSFILEPATH}"
+                        sh "$whatifaks"
+                        script {
+                            def approved = false
+                            timeout(time: 30, unit: 'MINUTES') {
+                                while (!approved) {
+                                    def approval = input(
+                                        message: "Do you approve Stage ${env.STAGE_NAME}?",
+                                        ok: 'Proceed',
+                                        submitter: 'krushna', // List of users who can approve
+                                        parameters: [choice(choices: ['Yes', 'No'], description: 'Approval', name: 'APPROVAL')]
+                                    )
+
+                                    if (approval == 'Yes') {
+                                        approved = true
+                                        echo "Stage ${env.STAGE_NAME} approved, proceeding to Stage ${env.STAGE_NAME}"
+                                        sh "$deployaks"
+                                    } else if (approval == 'No') {
+                                        echo "Stage ${env.STAGE_NAME} approval denied, proceeding to the next stage"
+                                        approved = true // Set approved to true to exit the loop
+                                    } else {
+                                        echo "Invalid response. Please select 'Yes' or 'No'."
+                                        sleep(30) // Wait for 30 seconds before checking again (adjust as needed)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        stage('PRD AKS Creation WhatIF and Deployment') {
+            steps{
+                dir("${workspace}"){
+                    script{
+                        def whatifaks = "az deployment group what-if --resource-group krushna_prd_rg --template-file ${env.PRDAKSTEMPLATEFILEPATH} --parameters ${env.PRDPARAMETERSFILEPATH}"
+                        def deployaks = "az deployment group create --resource-group krushna_prd_rg --template-file ${env.PRDAKSTEMPLATEFILEPATH} --parameters ${env.PRDPARAMETERSFILEPATH}"
+                        sh "$whatifaks"
+                        script {
+                            def approved = false
+                            timeout(time: 30, unit: 'MINUTES') {
+                                while (!approved) {
+                                    def approval = input(
+                                        message: "Do you approve Stage ${env.STAGE_NAME}?",
+                                        ok: 'Proceed',
+                                        submitter: 'krushna', // List of users who can approve
+                                        parameters: [choice(choices: ['Yes', 'No'], description: 'Approval', name: 'APPROVAL')]
+                                    )
+
+                                    if (approval == 'Yes') {
+                                        approved = true
+                                        echo "Stage ${env.STAGE_NAME} approved, proceeding to Stage ${env.STAGE_NAME}"
+                                        sh "$deployaks"
                                     } else if (approval == 'No') {
                                         echo "Stage ${env.STAGE_NAME} approval denied, proceeding to the next stage"
                                         approved = true // Set approved to true to exit the loop
