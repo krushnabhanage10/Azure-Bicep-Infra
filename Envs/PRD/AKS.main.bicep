@@ -10,18 +10,18 @@ var aksconfigs = [
   {
     name: 'prd-aks-app01'
     sku: {
-      name: 'Basic'
-      tier : 'Paid'
+      name: 'Base'
+      tier : 'Standard'
     }
-    aksversion: '1.27.0'
+    aksversion: '1.27.3'
     addonProfiles: {}
     agentPoolProfiles : [
       {
-        name: 'aks-nodepool-01'
+        name: 'nodepool01'
         osDiskSizeGB: 256
-        count: 5
+        count: 2
         type: 'VirtualMachineScaleSets'
-        vmSize: 'standard_d2s_v3'
+        vmSize: 'Standard_D2as_v4'
         osType: 'Linux'
         osSKU: 'Ubuntu'
         upgradeSettings: {}
@@ -29,8 +29,8 @@ var aksconfigs = [
         kubeletDiskType: 'OS'
         maxPods: 110
         vnetSubnetID: prdakssubnetID
-        osDiskType: 'Ephemeral'
-        availabilityZones: ['1','2','3']
+        osDiskType: 'Managed'
+        availabilityZones: ['1','2']
         maxCount: 10
         minCount: 2
         enableAutoScaling: true 
@@ -61,7 +61,14 @@ var aksconfigs = [
       secret: spnsecret
     }
     enableRBAC: true 
-    sshRSAPublicKeys : [loadTextContent('prd_ssh_key1.pem'), loadTextContent('prd_ssh_key2.pem')]
+    sshRSAPublicKeys : [
+      {
+        keyData: loadTextContent('prd_ssh_key1.pem')
+      } 
+      // {
+      //   keyData: loadTextContent('prd_ssh_key2.pem')
+      // }
+    ]
     publicNetworkAccess: 'Enabled'
     networkProfile: {
       ipFamilies: [
