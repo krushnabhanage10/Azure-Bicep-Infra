@@ -1,101 +1,152 @@
 param name string
 param location string
 param envr string
-var prdakssubnetID = '/subscriptions/4a84c9d0-d7e4-4681-be42-dd358c9f1ea0/resourceGroups/krushna_prd_rg/providers/Microsoft.Network/virtualNetworks/prd_infra_vnet/subnets/prd_subnet_k8s'
+var akssubnetid = '/subscriptions/4a84c9d0-d7e4-4681-be42-dd358c9f1ea0/resourceGroups/krushna_prd_rg/providers/Microsoft.Network/virtualNetworks/prd_infra_vnet/subnets/prd_subnet_k8s'
 var spnid = '39cfc2bd-9257-45f2-b3ad-d94f43b5f264'
 var spnsecret = '7wW8Q~3cSZDgUEC3bcjSrrLJZKd3o7MAEYSP1aMI'
-
+var resource_group = 'krushna_prd_rg'
 
 var aksconfigs = [
   {
     name: 'prd-aks-app01'
     sku: {
-      name: 'Base'
-      tier : 'Standard'
+      name: 'Basic'
+      tier: 'Paid'
     }
     aksversion: '1.27.3'
-    addonProfiles: {}
-    agentPoolProfiles : [
+    agentPoolProfiles: [
       {
         name: 'nodepool01'
-        osDiskSizeGB: 256
         count: 2
-        type: 'VirtualMachineScaleSets'
         vmSize: 'Standard_D2as_v4'
+        osDiskSizeGB: 256
+        osDiskType: 'Managed'
+        kubeletDiskType: 'OS'
+        vnetSubnetID: '/subscriptions/4a84c9d0-d7e4-4681-be42-dd358c9f1ea0/resourceGroups/krushna_prd_rg/providers/Microsoft.Network/virtualNetworks/prd_infra_vnet/subnets/prd_subnet_k8s'
+        maxPods: 110
+        type: 'VirtualMachineScaleSets'
+        availabilityZones: [
+          '1'
+          '2'
+        ]
+        maxCount: 10
+        minCount: 2
+        enableAutoScaling: true
+        powerState: {
+          code: 'Running'
+        }
+        orchestratorVersion: '1.27.3'
+        enableNodePublicIP: false
+        nodeLabels: {
+          'aks-node-env': 'prd-aks-nodes'
+        }
+        mode: 'System'
+        enableEncryptionAtHost: false
+        enableUltraSSD: false
         osType: 'Linux'
         osSKU: 'Ubuntu'
         upgradeSettings: {}
-        mode: 'System'
-        kubeletDiskType: 'OS'
-        maxPods: 110
-        vnetSubnetID: prdakssubnetID
-        osDiskType: 'Managed'
-        availabilityZones: ['1','2']
-        maxCount: 10
-        minCount: 2
-        enableAutoScaling: true 
-        powerState: { code: 'Running' }
-        orchestratorVersion: '1.27.0'
-        enableNodePublicIP: false 
-        nodeLabels: {'aks-node-env': 'prd-aks-nodes'}
-        // nodePublicIPPrefixID: 'test'
-        // nodeTaints: [
-        //   'test'
-        // ]
-        enableFIPS: false 
-        enableEncryptionAtHost: false
-        enableUltraSSD: false 
-        
+        enableFIPS: false
       }
     ]
-    // apiServerAccessProfile: {
-    //   authorizedIPRanges: [
-    //     'string'
-    //   ]
-    // aadProfile: {
-    //   adminGroupObjectIDs: [
-    //     'string'
-    //   ]
+    akssubnetid: akssubnetid
+    linuxProfile: {
+      adminUsername: 'prd-aks-app01sshuser'
+      ssh: {
+        publicKeys: [
+          {
+            keyData: loadTextContent('prd_ssh_key1.pem')
+          }
+        ]
+      }
+    }
+    nodepoolname: 'nodepool01'
+    nodecount: 2
+    nodesku: 'Standard_D2as_v4'
+    nodeosdisksize: 256
+    nodedisktype: 'Managed'
+    nodepooltype: 'VirtualMachineScaleSets'
+    nodemaxcount: 10
+    nodemincount: 2
+    isautoscaling: true
+    nodelabels:  {
+      'aks-node-env': 'prd-aks-nodes'
+    }
     servicePrincipalProfile: {
       clientId: spnid
       secret: spnsecret
     }
-    enableRBAC: true 
-    sshRSAPublicKeys : [
-      {
-        keyData: loadTextContent('prd_ssh_key1.pem')
-      } 
-      // {
-      //   keyData: loadTextContent('prd_ssh_key2.pem')
-      // }
-    ]
-    publicNetworkAccess: 'Enabled'
-    networkProfile: {
-      ipFamilies: [
-        'IPv4'
-      ]
-      loadBalancerProfile: {
-        enableMultipleStandardLoadBalancers: true
-        backendPoolType: 'nodeIPConfiguration'
-      }
-      loadBalancerSku: 'Standard'
-      monitoring: {
-        enabled: true
-      }
-      networkPlugin: 'kubenet'
-      networkPolicy: 'calico'
-      // podCidr: '192.168.0.0/16'
-      podCidrs: [
-        '192.168.0.0/16'
-      ]
-      // serviceCidr: '10.0.0.0/16'
-      serviceCidrs: [
-        '10.0.0.0/16'
-      ]
-      dockerBridgeCidr: '172.17.0.1/16'
-      outbountType: 'userDefinedRouting'
-    }
   }
+  // {
+  //   name: 'prd-aks-app02'
+  //   sku: {
+  //     name: 'Basic'
+  //     tier: 'Paid'
+  //   }
+  //   aksversion: '1.27.3'
+  //   agentPoolProfiles: [
+  //     {
+  //       name: 'nodepool01'
+  //       count: 2
+  //       vmSize: 'Standard_D2as_v4'
+  //       osDiskSizeGB: 256
+  //       osDiskType: 'Managed'
+  //       kubeletDiskType: 'OS'
+  //       vnetSubnetID: '/subscriptions/4a84c9d0-d7e4-4681-be42-dd358c9f1ea0/resourceGroups/krushna_prd_rg/providers/Microsoft.Network/virtualNetworks/prd_infra_vnet/subnets/prd_subnet_k8s'
+  //       maxPods: 110
+  //       type: 'VirtualMachineScaleSets'
+  //       availabilityZones: [
+  //         '1'
+  //         '2'
+  //       ]
+  //       maxCount: 10
+  //       minCount: 2
+  //       enableAutoScaling: true
+  //       powerState: {
+  //         code: 'Running'
+  //       }
+  //       orchestratorVersion: '1.27.3'
+  //       enableNodePublicIP: false
+  //       nodeLabels: {
+  //         'aks-node-env': 'prd-aks-nodes'
+  //       }
+  //       mode: 'System'
+  //       enableEncryptionAtHost: false
+  //       enableUltraSSD: false
+  //       osType: 'Linux'
+  //       osSKU: 'Ubuntu'
+  //       upgradeSettings: {}
+  //       enableFIPS: false
+  //     }
+  //   ]
+  //   akssubnetid: akssubnetid
+  //   linuxProfile: {
+  //     adminUsername: 'prd-aks-app02sshuser'
+  //     ssh: {
+  //       publicKeys: [
+  //         {
+  //           keyData: loadTextContent('prd_ssh_key1.pem')
+  //         }
+  //       ]
+  //     }
+  //   }
+  //   nodepoolname: 'nodepool01'
+  //   nodecount: 2
+  //   nodesku: 'Standard_D2as_v4'
+  //   nodeosdisksize: 256
+  //   nodedisktype: 'Managed'
+  //   nodepooltype: 'VirtualMachineScaleSets'
+  //   nodemaxcount: 10
+  //   nodemincount: 2
+  //   isautoscaling: true
+  //   nodelabels:  {
+  //     'aks-node-env': 'prd-aks-nodes'
+  //   }
+  //   servicePrincipalProfile: {
+  //     clientId: spnid
+  //     secret: spnsecret
+  //   }
+  // }
 ]
 
 module aks '../../Modules/AKS/AKS.bicep' = [ for aksconfig in aksconfigs: {
@@ -103,18 +154,27 @@ module aks '../../Modules/AKS/AKS.bicep' = [ for aksconfig in aksconfigs: {
   params:{
     name: aksconfig.name
     location: location
-    sku: aksconfig.sku
-    aksversion: aksconfig.aksversion  
+    resource_group: name
     tags: {
       CreatedUsing: 'Bicep'
       CreatorBy: 'Krushna'
       Environment : envr
     }
+    sku: aksconfig.sku
+    aksversion: aksconfig.aksversion
     agentPoolProfiles: aksconfig.agentPoolProfiles
-    sshRSAPublicKeys : aksconfig.sshRSAPublicKeys
-    servicePrincipalProfile: aksconfig.servicePrincipalProfile
-    enableRBAC: aksconfig.enableRBAC
-    publicNetworkAccess: aksconfig.publicNetworkAccess
-    networkProfile: aksconfig.networkProfile
+    akssubnetid: aksconfig.akssubnetid
+    linuxProfile: aksconfig.linuxProfile
+    nodepoolname: aksconfig.nodepoolname
+    nodecount: aksconfig.nodecount
+    nodesku: aksconfig.nodesku
+    nodeosdisksize: aksconfig.nodeosdisksize
+    nodedisktype: aksconfig.nodedisktype
+    nodepooltype: aksconfig.nodepooltype
+    nodemaxcount: aksconfig.nodemaxcount
+    nodemincount: aksconfig.nodemincount
+    isautoscaling: aksconfig.isautoscaling
+    nodelabels: aksconfig.nodelabels
+    servicePrincipalProfile : aksconfig.servicePrincipalProfile
   }
 }]
