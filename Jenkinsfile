@@ -1,5 +1,10 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'krushnabhanage10/jnlp-slave:latest'
+            args "--user root --privileged"
+        }
+    }
     environment {
     AZ_CRED = credentials('AZ_SPN')
     }
@@ -9,28 +14,28 @@ pipeline {
     }
 
     stages {
-        // stage('Load Environment Variables') {
-        //     steps {
-        //         script {
-        //             def envProperties = [:]
-        //             def envFile = readFile 'env.properties'
-        //             envFile.readLines().each { line ->
-        //                 def (key, value) = line.tokenize('=').collect { it.trim() }
-        //                 envProperties[key] = value
-        //             }
-        //             envProperties.each { key, value ->
-        //                 env[key] = value
-        //             }
-        //         }
-        //     }
-        // }
-        // stage('Logging In to Azure'){
-        //     steps{
-        //         script{
-        //             sh 'az login --service-principal -u $AZ_CRED_CLIENT_ID -p $AZ_CRED_CLIENT_SECRET -t $AZ_CRED_TENANT_ID'
-        //         }
-        //     }
-        // }
+        stage('Load Environment Variables') {
+            steps {
+                script {
+                    def envProperties = [:]
+                    def envFile = readFile 'env.properties'
+                    envFile.readLines().each { line ->
+                        def (key, value) = line.tokenize('=').collect { it.trim() }
+                        envProperties[key] = value
+                    }
+                    envProperties.each { key, value ->
+                        env[key] = value
+                    }
+                }
+            }
+        }
+        stage('Logging In to Azure'){
+            steps{
+                script{
+                    sh 'az login --service-principal -u $AZ_CRED_CLIENT_ID -p $AZ_CRED_CLIENT_SECRET -t $AZ_CRED_TENANT_ID'
+                }
+            }
+        }
         stage('Determine Infra Steps to Deploy') {
             steps {
                 script {
