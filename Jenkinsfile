@@ -47,31 +47,23 @@ pipeline {
 
                     if (processType == 'RG Creation WhatIF and Deployment' || processType == 'VNET and SUBNET Creation WhatIF and Deployment' || processType == 'NSG Creation WhatIF and Deployment' || processType == 'RouteTable Creation WhatIF and Deployment'|| processType == 'AKS Creation WhatIF and Deployment') {
                         parallelJenkinsfiles['Deploying'] = {
-                            load 'RGenkinsfile'                            }
+                            load 'RGenkinsfile'                            
                         }
                     } else if (processType == 'RG Creation WhatIF and Deployment' || processType == 'VNET and SUBNET Creation WhatIF and Deployment' || processType == 'NSG Creation WhatIF and Deployment' || processType == 'RouteTable Creation WhatIF and Deployment'|| processType == 'AKS Creation WhatIF and Deployment') {
                         parallelJenkinsfiles['Deploying'] = {
-                            node {
-                                load 'NWJenkinsfile'
-                            }
+                            load 'NWJenkinsfile'
                         }
                     } else if (processType == 'RG Creation WhatIF and Deployment' || processType == 'VNET and SUBNET Creation WhatIF and Deployment' || processType == 'NSG Creation WhatIF and Deployment' || processType == 'RouteTable Creation WhatIF and Deployment'|| processType == 'AKS Creation WhatIF and Deployment') {
                         parallelJenkinsfiles['Deploying'] = {
-                            node {
-                                load 'NSGJenkinsfile'
-                            }
+                            load 'NSGJenkinsfile'
                         }
                     } else if (processType == 'RG Creation WhatIF and Deployment' || processType == 'VNET and SUBNET Creation WhatIF and Deployment' || processType == 'NSG Creation WhatIF and Deployment' || processType == 'RouteTable Creation WhatIF and Deployment'|| processType == 'AKS Creation WhatIF and Deployment') {
                         parallelJenkinsfiles['Deploying'] = {
-                            node {
-                                load 'RTJenkinsfile'
-                            }
+                            load 'RTJenkinsfile'
                         }
                     } else if (processType == 'RG Creation WhatIF and Deployment' || processType == 'VNET and SUBNET Creation WhatIF and Deployment' || processType == 'NSG Creation WhatIF and Deployment' || processType == 'RouteTable Creation WhatIF and Deployment'|| processType == 'AKS Creation WhatIF and Deployment') {
                         parallelJenkinsfiles['Deploying'] = {
-                            node {
-                                load 'AKSJenkinsfile'
-                            }
+                            load 'AKSJenkinsfile'
                         }
                     } else {
                         error('Invalid process type specified.')
