@@ -57,8 +57,6 @@ pipeline {
                     if (userInput.RunRGWhatIF) {
                         parallelStages['RG WhatIF'] = {
                             // Run RG Creation WhatIF and Deployment
-                            def loadrg = load 'RGJenkinsfile'
-                            loadrg.run()
                             echo 'Running RG WhatIF'
                             stage('DEV RG Creation WhatIF and Deployment') {
                                 steps {
