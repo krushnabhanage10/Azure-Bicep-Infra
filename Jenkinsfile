@@ -41,40 +41,42 @@ pipeline {
                 script {
                     def userInput = input(
                         id: 'userInput', 
-                        message: 'Select an option:',
+                        message: 'Do you want to run the following stages?',
                         parameters: [
-                            choice(name: 'RG Creation WhatIF and Deployment', description: 'Run RG Creation WhatIF and Deployment', choices: 'RG Creation WhatIF and Deployment'),
-                            choice(name: 'VNET and SUBNET Creation WhatIF and Deployment', description: 'Run VNET and SUBNET Creation WhatIF and Deployment', choices: 'VNET and SUBNET Creation WhatIF and Deployment'),
-                            choice(name: 'NSG Creation WhatIF and Deployment', description: 'Run NSG Creation WhatIF and Deployment', choices: 'NSG Creation WhatIF and Deployment'),
-                            choice(name: 'RouteTable Creation WhatIF and Deployment', description: 'Run RouteTable Creation WhatIF and Deployment', choices: 'RouteTable Creation WhatIF and Deployment'),
-                            choice(name: 'AKS Creation WhatIF and Deployment', description: 'Run AKS Creation WhatIF and Deployment', choices: 'AKS Creation WhatIF and Deployment'),
+                            booleanParam(name: 'RunRGWhatIF', defaultValue: false, description: 'Run RG Creation WhatIF and Deployment?'),
+                            booleanParam(name: 'RunVNETWhatIF', defaultValue: false, description: 'Run VNET and SUBNET Creation WhatIF and Deployment?'),
+                            booleanParam(name: 'RunNSGWhatIF', defaultValue: false, description: 'Run NSG Creation WhatIF and Deployment?'),
+                            booleanParam(name: 'RunRouteTableWhatIF', defaultValue: false, description: 'Run RouteTable Creation WhatIF and Deployment?'),
+                            booleanParam(name: 'RunAKSWhatIF', defaultValue: false, description: 'Run AKS Creation WhatIF and Deployment?')
                         ]
                     )
 
-                    if (userInput == 'RG Creation WhatIF and Deployment') {
+                    // Check the user's choices and execute stages accordingly
+                    if (userInput.RunRGWhatIF) {
                         parallelJenkinsfiles['Deploying'] = {
                             load 'RGenkinsfile'                            
                         }
-                    } else if (userInput == 'VNET and SUBNET Creation WhatIF and Deployment') {
+                    }
+                    if (userInput.RunVNETWhatIF) {
                         parallelJenkinsfiles['Deploying'] = {
                             load 'NWJenkinsfile'
                         }
-                    } else if (userInput == 'NSG Creation WhatIF and Deployment') {
+                    }
+                    if (userInput.RunNSGWhatIF) {
                         parallelJenkinsfiles['Deploying'] = {
                             load 'NSGJenkinsfile'
                         }
-                    } else if (userInput == 'RouteTable Creation WhatIF and Deployment') {
+                    }
+                    if (userInput.RunRouteTableWhatIF) {
                         parallelJenkinsfiles['Deploying'] = {
                             load 'RTJenkinsfile'
                         }
-                    } else if (userInput == 'AKS Creation WhatIF and Deployment') {
+                    }
+                    if (userInput.RunAKSWhatIF) {
                         parallelJenkinsfiles['Deploying'] = {
                             load 'AKSJenkinsfile'
                         }
-                    } else {
-                        error('Invalid process type specified.')
                     }
-
                     parallel parallelJenkinsfiles
                 }
             }
