@@ -95,14 +95,14 @@ pipeline {
                     }
                 }
             }
-    }
+        }
     post {
     always {
         emailext body: "The build URL :${env.BUILD_URL} has result ${currentBuild.result}",
             attachLog: true,
             to: 'krushna.bhanage@outlook.com',
             subject: "Status of pipeline - ${currentBuild.fullDisplayName}:${currentBuild.result}"             
+        }
     }
-}
 }
 
