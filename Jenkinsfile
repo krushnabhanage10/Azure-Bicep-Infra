@@ -1,9 +1,12 @@
 pipeline {
+    // agent {
+    //     docker {
+    //         image 'krushnabhanage10/jnlp-slave:latest'
+    //         args "--user root --privileged"
+    //     }
+    // }
     agent {
-        docker {
-            image 'krushnabhanage10/jnlp-slave:latest'
-            args "--user root --privileged"
-        }
+        label 'vm'
     }
     environment {
     AZ_CRED = credentials('AZ_SPN')
