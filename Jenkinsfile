@@ -38,7 +38,7 @@ pipeline {
         }
         stage('Determine Infra Steps to Deploy') {
             steps {
-                script {
+                // script {
                         def userInput = input(
                             id: 'userInput', 
                             message: 'Do you want to run the following stages in parallel?',
@@ -93,7 +93,7 @@ pipeline {
                         
                         // Execute the parallel stages
                         parallel parallelStages
-                    }
+                    // }
                 }
             }
         }
