@@ -50,34 +50,44 @@ pipeline {
                             booleanParam(name: 'RunAKSWhatIF', defaultValue: false, description: 'Run AKS Creation WhatIF and Deployment?')
                         ]
                     )
-
+                    def parallelStages = []
                     // Check the user's choices and execute stages accordingly
                     if (userInput.RunRGWhatIF) {
-                        parallelJenkinsfiles['Deploying'] = {
-                            load 'RGenkinsfile'                            
-                        }
+                        parallelStages.add('RG WhatIF': {
+                            // Run RG Creation WhatIF and Deployment
+                            echo 'Running RG WhatIF'
+                            load 'RGenkinsfile'  
+                        })
                     }
                     if (userInput.RunVNETWhatIF) {
-                        parallelJenkinsfiles['Deploying'] = {
+                        parallelStages.add('VNET WhatIF': {
+                            // Run VNET and SUBNET Creation WhatIF and Deployment
                             load 'NWJenkinsfile'
-                        }
+                            echo 'Running VNET WhatIF'
+                        })
                     }
                     if (userInput.RunNSGWhatIF) {
-                        parallelJenkinsfiles['Deploying'] = {
+                        parallelStages.add('NSG WhatIF': {
+                            // Run NSG Creation WhatIF and Deployment
                             load 'NSGJenkinsfile'
-                        }
+                            echo 'Running NSG WhatIF'
+                        })
                     }
                     if (userInput.RunRouteTableWhatIF) {
-                        parallelJenkinsfiles['Deploying'] = {
+                        parallelStages.add('RouteTable WhatIF': {
+                            // Run RouteTable Creation WhatIF and Deployment
                             load 'RTJenkinsfile'
-                        }
+                            echo 'Running RouteTable WhatIF'
+                        })
                     }
                     if (userInput.RunAKSWhatIF) {
-                        parallelJenkinsfiles['Deploying'] = {
+                        parallelStages.add('AKS WhatIF': {
                             load 'AKSJenkinsfile'
-                        }
+                            echo 'Running AKS WhatIF'
+                        })
                     }
-                    parallel parallelJenkinsfiles
+                    // Execute the parallel stages
+                    parallel(parallelStages)
                 }
             }
         }
