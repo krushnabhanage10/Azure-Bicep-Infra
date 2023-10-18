@@ -62,41 +62,40 @@ pipeline {
                             echo 'Running RG WhatIF'
                         }
                     }
-                    if (userInput.RunVNETWhatIF) {
-                        parallelStages['VNET WhatIF'] = {
-                            // Run VNET and SUBNET Creation WhatIF and Deployment
-                            load 'NWJenkinsfile'
-                            echo 'Running VNET WhatIF'
-                        }
-                    }
-                    if (userInput.RunNSGWhatIF) {
-                        parallelStages['NSG WhatIF'] = {
-                            // Run NSG Creation WhatIF and Deployment
-                            load 'NSGJenkinsfile'
-                            echo 'Running NSG WhatIF'
-                        }
-                    }
-                    if (userInput.RunRouteTableWhatIF) {
-                        parallelStages['RouteTable WhatIF'] = {
-                            // Run RouteTable Creation WhatIF and Deployment
-                            load 'RTJenkinsfile'
-                            echo 'Running RouteTable WhatIF'
-                        }
-                    }
-                    if (userInput.RunAKSWhatIF) {
-                        parallelStages['AKS WhatIF'] = {
-                            // Run AKS Creation WhatIF and Deployment
-                            load 'AKSJenkinsfile'
-                            echo 'Running AKS WhatIF'
-                        }
-                    }
-                    
+                    // if (userInput.RunVNETWhatIF) {
+                    //     parallelStages['VNET WhatIF'] = {
+                    //         // Run VNET and SUBNET Creation WhatIF and Deployment
+                    //         load 'NWJenkinsfile'
+                    //         echo 'Running VNET WhatIF'
+                    //     }
+                    // }
+                    // if (userInput.RunNSGWhatIF) {
+                    //     parallelStages['NSG WhatIF'] = {
+                    //         // Run NSG Creation WhatIF and Deployment
+                    //         load 'NSGJenkinsfile'
+                    //         echo 'Running NSG WhatIF'
+                    //     }
+                    // }
+                    // if (userInput.RunRouteTableWhatIF) {
+                    //     parallelStages['RouteTable WhatIF'] = {
+                    //         // Run RouteTable Creation WhatIF and Deployment
+                    //         load 'RTJenkinsfile'
+                    //         echo 'Running RouteTable WhatIF'
+                    //     }
+                    // }
+                    // if (userInput.RunAKSWhatIF) {
+                    //     parallelStages['AKS WhatIF'] = {
+                    //         // Run AKS Creation WhatIF and Deployment
+                    //         load 'AKSJenkinsfile'
+                    //         echo 'Running AKS WhatIF'
+                    //     }
+                    // }
                     // Execute the parallel stages
                     parallel parallelStages
-                    }
                 }
             }
         }
+    }
     post {
     always {
         emailext body: "The build URL :${env.BUILD_URL} has result ${currentBuild.result}",
