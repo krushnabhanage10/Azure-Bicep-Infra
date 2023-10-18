@@ -40,6 +40,7 @@ pipeline {
             steps {
                 script {
                     def processType = params.PROCESS_TYPE
+                    PROCESS_TYPE == 'RG Creation WhatIF and Deployment'
                     echo "Selected process type: ${processType}"
 
                     def parallelJenkinsfiles = [:]
