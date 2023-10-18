@@ -45,28 +45,28 @@ pipeline {
                         parameters: [
                             choice(name: 'RG Creation WhatIF and Deployment', description: 'Run RG Creation WhatIF and Deployment', choices: 'RG Creation WhatIF and Deployment'),
                             choice(name: 'VNET and SUBNET Creation WhatIF and Deployment', description: 'Run VNET and SUBNET Creation WhatIF and Deployment', choices: 'VNET and SUBNET Creation WhatIF and Deployment'),
-                            choice(name: 'NSG Creation WhatIF and Deployment'', description: 'Run NSG Creation WhatIF and Deployment'', choices: 'NSG Creation WhatIF and Deployment''),
+                            choice(name: 'NSG Creation WhatIF and Deployment', description: 'Run NSG Creation WhatIF and Deployment', choices: 'NSG Creation WhatIF and Deployment'),
                             choice(name: 'RouteTable Creation WhatIF and Deployment', description: 'Run RouteTable Creation WhatIF and Deployment', choices: 'RouteTable Creation WhatIF and Deployment'),
                             choice(name: 'AKS Creation WhatIF and Deployment', description: 'Run AKS Creation WhatIF and Deployment', choices: 'AKS Creation WhatIF and Deployment'),
                         ]
 
-                    if (userInput == 'RG Creation WhatIF and Deployment' || userInput == 'VNET and SUBNET Creation WhatIF and Deployment' || userInput == 'NSG Creation WhatIF and Deployment' || userInput == 'RouteTable Creation WhatIF and Deployment'|| userInput == 'AKS Creation WhatIF and Deployment') {
+                    if (userInput == 'RG Creation WhatIF and Deployment') {
                         parallelJenkinsfiles['Deploying'] = {
                             load 'RGenkinsfile'                            
                         }
-                    } else if (userInput == 'RG Creation WhatIF and Deployment' || userInput == 'VNET and SUBNET Creation WhatIF and Deployment' || userInput == 'NSG Creation WhatIF and Deployment' || userInput == 'RouteTable Creation WhatIF and Deployment'|| userInput == 'AKS Creation WhatIF and Deployment') {
+                    } else if (userInput == 'VNET and SUBNET Creation WhatIF and Deployment') {
                         parallelJenkinsfiles['Deploying'] = {
                             load 'NWJenkinsfile'
                         }
-                    } else if (userInput == 'RG Creation WhatIF and Deployment' || userInput == 'VNET and SUBNET Creation WhatIF and Deployment' || userInput == 'NSG Creation WhatIF and Deployment' || userInput == 'RouteTable Creation WhatIF and Deployment'|| userInput == 'AKS Creation WhatIF and Deployment') {
+                    } else if (userInput == 'NSG Creation WhatIF and Deployment') {
                         parallelJenkinsfiles['Deploying'] = {
                             load 'NSGJenkinsfile'
                         }
-                    } else if (userInput == 'RG Creation WhatIF and Deployment' || userInput == 'VNET and SUBNET Creation WhatIF and Deployment' || userInput == 'NSG Creation WhatIF and Deployment' || userInput == 'RouteTable Creation WhatIF and Deployment'|| userInput == 'AKS Creation WhatIF and Deployment') {
+                    } else if (userInput == 'RouteTable Creation WhatIF and Deployment') {
                         parallelJenkinsfiles['Deploying'] = {
                             load 'RTJenkinsfile'
                         }
-                    } else if (userInput == 'RG Creation WhatIF and Deployment' || userInput == 'VNET and SUBNET Creation WhatIF and Deployment' || userInput == 'NSG Creation WhatIF and Deployment' || userInput == 'RouteTable Creation WhatIF and Deployment'|| userInput == 'AKS Creation WhatIF and Deployment') {
+                    } else if (userInput == 'AKS Creation WhatIF and Deployment') {
                         parallelJenkinsfiles['Deploying'] = {
                             load 'AKSJenkinsfile'
                         }
