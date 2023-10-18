@@ -49,6 +49,7 @@ pipeline {
                             choice(name: 'RouteTable Creation WhatIF and Deployment', description: 'Run RouteTable Creation WhatIF and Deployment', choices: 'RouteTable Creation WhatIF and Deployment'),
                             choice(name: 'AKS Creation WhatIF and Deployment', description: 'Run AKS Creation WhatIF and Deployment', choices: 'AKS Creation WhatIF and Deployment'),
                         ]
+                    )
 
                     if (userInput == 'RG Creation WhatIF and Deployment') {
                         parallelJenkinsfiles['Deploying'] = {
