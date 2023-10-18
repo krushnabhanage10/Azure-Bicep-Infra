@@ -50,7 +50,7 @@ pipeline {
                             booleanParam(name: 'RunAKSWhatIF', defaultValue: false, description: 'Run AKS Creation WhatIF and Deployment?')
                         ]
                     )
-                    def parallelStages = []
+                    def parallelStages = [:]
                     // Check the user's choices and execute stages accordingly
                     if (userInput.RunRGWhatIF) {
                         parallelStages.add('RG WhatIF': {
