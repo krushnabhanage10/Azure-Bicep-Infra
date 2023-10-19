@@ -57,7 +57,7 @@ var vmconfigs = [
       networkProfile: {
         networkInterfaces: [
           {
-            id: '/subscriptions/4a84c9d0-d7e4-4681-be42-dd358c9f1ea0/resourceGroups/krushna_prd_rg/providers/Microsoft.Network/networkInterfaces/prd-linux-vm-20231010'
+            // id: '/subscriptions/4a84c9d0-d7e4-4681-be42-dd358c9f1ea0/resourceGroups/krushna_prd_rg/providers/Microsoft.Network/networkInterfaces/prd-linux-vm-20231010'
             properties: {
               deleteOption: 'Delete'
             }
@@ -123,7 +123,7 @@ var vmconfigs = [
       networkProfile: {
         networkInterfaces: [
           {
-            id: '/subscriptions/4a84c9d0-d7e4-4681-be42-dd358c9f1ea0/resourceGroups/krushna_prd_rg/providers/Microsoft.Network/networkInterfaces/prd-windows-vm-20231010'
+            // id: '/subscriptions/4a84c9d0-d7e4-4681-be42-dd358c9f1ea0/resourceGroups/krushna_prd_rg/providers/Microsoft.Network/networkInterfaces/prd-windows-vm-20231010'
             properties: {
               deleteOption: 'Delete'
             }
