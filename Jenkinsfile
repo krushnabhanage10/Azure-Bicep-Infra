@@ -13,19 +13,6 @@ pipeline {
     }
 
     stages {
-        // stage('Choose Environment to Plan/Deploy'){
-        //     steps{
-        //         script{
-        //             def DeployTo = input(
-        //                 message: "Select Env to Deploy",
-        //                 ok: 'Proceed',
-        //                 submitter: 'krushna', // List of users who can approve
-        //                 parameters: [choice(choices: ['DEV', 'PRD'], description: 'Approval', name: 'DeployTo')]
-        //             )
-        //         echo "Selected Env is : $DeployTo"
-        //         }
-        //     }
-        // }
         stage('Load Environment Variables') {
             steps {
                 script {
@@ -229,7 +216,43 @@ pipeline {
                             }
                         }
                     }
-                } 
+                }
+                stage('DEV AKS Creation WhatIF and Deployment') {
+                    steps {
+                        dir("${workspace}"){
+                            script{
+                                def whatifvm = "az deployment group what-if --resource-group krushna_dev_rg --template-file ${env.DEVVMTEMPLATEFILEPATH} --parameters ${env.DEVPARAMETERSFILEPATH}"
+                                def deployvm = "az deployment group create --resource-group krushna_dev_rg --template-file ${env.DEVVMTEMPLATEFILEPATH} --parameters ${env.DEVPARAMETERSFILEPATH}"
+                                sh "$whatifvm"
+                                script {
+                                    def approved = false
+                                    timeout(time: 30, unit: 'MINUTES') {
+                                        while (!approved) {
+                                            def approval = input(
+                                                message: "Do you approve Stage ${env.STAGE_NAME}?",
+                                                ok: 'Proceed',
+                                                submitter: 'krushna', // List of users who can approve
+                                                parameters: [choice(choices: ['Yes', 'No'], description: 'Approval', name: 'APPROVAL')]
+                                            )
+
+                                            if (approval == 'Yes') {
+                                                approved = true
+                                                echo "Stage ${env.STAGE_NAME} approved, proceeding to Stage ${env.STAGE_NAME}"
+                                                sh "$deployvm"
+                                            } else if (approval == 'No') {
+                                                echo "Stage ${env.STAGE_NAME} approval denied, proceeding to the next stage"
+                                                approved = true // Set approved to true to exit the loop
+                                            } else {
+                                                echo "Invalid response. Please select 'Yes' or 'No'."
+                                                sleep(30) // Wait for 30 seconds before checking again (adjust as needed)
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }  
             }
         }
         stage('triggerallPRD'){
@@ -413,7 +436,43 @@ pipeline {
                             }
                         }
                     }
-                }  
+                }
+                stage('PRD VM Creation WhatIF and Deployment') {
+                    steps{
+                        dir("${workspace}"){
+                            script{
+                                def whatifvm = "az deployment group what-if --resource-group krushna_prd_rg --template-file ${env.PRDVMTEMPLATEFILEPATH} --parameters ${env.PRDPARAMETERSFILEPATH}"
+                                def deployvm = "az deployment group create --resource-group krushna_prd_rg --template-file ${env.PRDVMTEMPLATEFILEPATH} --parameters ${env.PRDPARAMETERSFILEPATH}"
+                                sh "$whatifvm"
+                                script {
+                                    def approved = false
+                                    timeout(time: 30, unit: 'MINUTES') {
+                                        while (!approved) {
+                                            def approval = input(
+                                                message: "Do you approve Stage ${env.STAGE_NAME}?",
+                                                ok: 'Proceed',
+                                                submitter: 'krushna', // List of users who can approve
+                                                parameters: [choice(choices: ['Yes', 'No'], description: 'Approval', name: 'APPROVAL')]
+                                            )
+
+                                            if (approval == 'Yes') {
+                                                approved = true
+                                                echo "Stage ${env.STAGE_NAME} approved, proceeding to Stage ${env.STAGE_NAME}"
+                                                sh "$deployvm"
+                                            } else if (approval == 'No') {
+                                                echo "Stage ${env.STAGE_NAME} approval denied, proceeding to the next stage"
+                                                approved = true // Set approved to true to exit the loop
+                                            } else {
+                                                echo "Invalid response. Please select 'Yes' or 'No'."
+                                                sleep(30) // Wait for 30 seconds before checking again (adjust as needed)
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }     
             }
         }
     }
