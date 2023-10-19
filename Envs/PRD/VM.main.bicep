@@ -24,7 +24,6 @@ var vmconfigs = [
           caching: 'ReadWrite'
           managedDisk: {
             storageAccountType: 'Premium_LRS'
-            id: '/subscriptions/4a84c9d0-d7e4-4681-be42-dd358c9f1ea0/resourceGroups/krushna_prd_rg/providers/Microsoft.Compute/disks/prd-linux-vm-01_OsDisk_1_20231010'
           }
           deleteOption: 'Delete'
           diskSizeGB: 32
@@ -87,10 +86,8 @@ var vmconfigs = [
           caching: 'ReadWrite'
           managedDisk: {
             storageAccountType: 'Premium_LRS'
-            id: '/subscriptions/4a84c9d0-d7e4-4681-be42-dd358c9f1ea0/resourceGroups/krushna_prd_rg/providers/Microsoft.Compute/disks/prd-windows-vm-01_OsDisk_1_20231010'
           }
           deleteOption: 'Delete'
-          diskSizeGB: 127
         }
         dataDisks: []
         diskControllerType: 'SCSI'
