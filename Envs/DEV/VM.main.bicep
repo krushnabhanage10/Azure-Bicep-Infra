@@ -1,6 +1,7 @@
 param name string
 param location string
 param envr string
+var vmsubnetid = '/subscriptions/4a84c9d0-d7e4-4681-be42-dd358c9f1ea0/resourceGroups/krushna_dev_rg/providers/Microsoft.Network/virtualNetworks/dev_infra_vnet/subnets/dev_subnet_iaas'
 var vmpassword = 'AdminVM202310#'
 
 var vmconfigs = [
@@ -34,6 +35,7 @@ var vmconfigs = [
       osProfile: {
         computerName: 'dev-linux-vm-01'
         adminUsername: 'VMAdmin'
+        adminPassword: vmpassword
         linuxConfiguration: {
           disablePasswordAuthentication: false
           provisionVMAgent: true
@@ -45,7 +47,6 @@ var vmconfigs = [
         }
         secrets: []
         allowExtensionOperations: true
-        requireGuestProvisionSignal: true
       }
       securityProfile: {
         uefiSettings: {
@@ -57,7 +58,7 @@ var vmconfigs = [
       networkProfile: {
         networkInterfaces: [
           {
-            // id: '/subscriptions/4a84c9d0-d7e4-4681-be42-dd358c9f1ea0/resourceGroups/krushna_dev_rg/providers/Microsoft.Network/networkInterfaces/dev-linux-vm-20231010'
+            id: '/subscriptions/4a84c9d0-d7e4-4681-be42-dd358c9f1ea0/resourceGroups/krushna_dev_rg/providers/Microsoft.Network/networkInterfaces/dev-linux-vm-20231010'
             properties: {
               deleteOption: 'Delete'
             }
@@ -65,6 +66,9 @@ var vmconfigs = [
         ]
       }
     }
+    nicname: 'dev-linux-vm-20231010'
+    subnetid: vmsubnetid
+    ipconfigname: 'devlinuxvmip'
   }
   {
     name: 'dev-windows-vm-01'
@@ -96,6 +100,7 @@ var vmconfigs = [
       osProfile: {
         computerName: 'dev-windows-vm-'
         adminUsername: 'VMAdmin'
+        adminPassword: vmpassword
         windowsConfiguration: {
           provisionVMAgent: true
           enableAutomaticUpdates: true
@@ -112,7 +117,6 @@ var vmconfigs = [
         }
         secrets: []
         allowExtensionOperations: true
-        requireGuestProvisionSignal: true
       }
       securityProfile: {
         uefiSettings: {
@@ -124,7 +128,7 @@ var vmconfigs = [
       networkProfile: {
         networkInterfaces: [
           {
-            // id: '/subscriptions/4a84c9d0-d7e4-4681-be42-dd358c9f1ea0/resourceGroups/krushna_dev_rg/providers/Microsoft.Network/networkInterfaces/dev-windows-vm-20231010'
+            id: '/subscriptions/4a84c9d0-d7e4-4681-be42-dd358c9f1ea0/resourceGroups/krushna_dev_rg/providers/Microsoft.Network/networkInterfaces/dev-windows-vm-20231010'
             properties: {
               deleteOption: 'Delete'
             }
@@ -132,6 +136,9 @@ var vmconfigs = [
         ]
       }
     }
+    nicname: 'dev-windows-vm-20231010'
+    subnetid: vmsubnetid
+    ipconfigname: 'devwindowsvmip'
   }
 ]
 
@@ -147,5 +154,8 @@ module az_vm '../../Modules/VM/VM.bicep' = [ for vmconfig in vmconfigs : {
       Environment : envr
     }
     properties: vmconfig.properties
+    nicname: vmconfig.nicname
+    subnetid: vmconfig.subnetid
+    ipconfigname: vmconfig.ipconfigname
   }
 }]

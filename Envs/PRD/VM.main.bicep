@@ -1,6 +1,7 @@
 param name string
 param location string
 param envr string
+var vmsubnetid = '/subscriptions/4a84c9d0-d7e4-4681-be42-dd358c9f1ea0/resourceGroups/krushna_prd_rg/providers/Microsoft.Network/virtualNetworks/prd_infra_vnet/subnets/prd_subnet_iaas'
 var vmpassword = 'AdminVM202310#'
 
 var vmconfigs = [
@@ -34,6 +35,7 @@ var vmconfigs = [
       osProfile: {
         computerName: 'prd-linux-vm-01'
         adminUsername: 'VMAdmin'
+        adminPassword: vmpassword
         linuxConfiguration: {
           disablePasswordAuthentication: false
           provisionVMAgent: true
@@ -45,7 +47,6 @@ var vmconfigs = [
         }
         secrets: []
         allowExtensionOperations: true
-        requireGuestProvisionSignal: true
       }
       securityProfile: {
         uefiSettings: {
@@ -57,7 +58,7 @@ var vmconfigs = [
       networkProfile: {
         networkInterfaces: [
           {
-            // id: '/subscriptions/4a84c9d0-d7e4-4681-be42-dd358c9f1ea0/resourceGroups/krushna_prd_rg/providers/Microsoft.Network/networkInterfaces/prd-linux-vm-20231010'
+            id: '/subscriptions/4a84c9d0-d7e4-4681-be42-dd358c9f1ea0/resourceGroups/krushna_prd_rg/providers/Microsoft.Network/networkInterfaces/prd-linux-vm-20231010'
             properties: {
               deleteOption: 'Delete'
             }
@@ -65,6 +66,9 @@ var vmconfigs = [
         ]
       }
     }
+    nicname: 'prd-linux-vm-20231010'
+    subnetid: vmsubnetid
+    ipconfigname: 'prdlinuxvmip'
   }
   {
     name: 'prd-windows-vm-01'
@@ -88,6 +92,7 @@ var vmconfigs = [
             storageAccountType: 'Premium_LRS'
           }
           deleteOption: 'Delete'
+          diskSizeGB: 127
         }
         dataDisks: []
         diskControllerType: 'SCSI'
@@ -95,6 +100,7 @@ var vmconfigs = [
       osProfile: {
         computerName: 'prd-windows-vm-'
         adminUsername: 'VMAdmin'
+        adminPassword: vmpassword
         windowsConfiguration: {
           provisionVMAgent: true
           enableAutomaticUpdates: true
@@ -111,7 +117,6 @@ var vmconfigs = [
         }
         secrets: []
         allowExtensionOperations: true
-        requireGuestProvisionSignal: true
       }
       securityProfile: {
         uefiSettings: {
@@ -123,7 +128,7 @@ var vmconfigs = [
       networkProfile: {
         networkInterfaces: [
           {
-            // id: '/subscriptions/4a84c9d0-d7e4-4681-be42-dd358c9f1ea0/resourceGroups/krushna_prd_rg/providers/Microsoft.Network/networkInterfaces/prd-windows-vm-20231010'
+            id: '/subscriptions/4a84c9d0-d7e4-4681-be42-dd358c9f1ea0/resourceGroups/krushna_prd_rg/providers/Microsoft.Network/networkInterfaces/prd-windows-vm-20231010'
             properties: {
               deleteOption: 'Delete'
             }
@@ -131,6 +136,9 @@ var vmconfigs = [
         ]
       }
     }
+    nicname: 'prd-windows-vm-20231010'
+    subnetid: vmsubnetid
+    ipconfigname: 'prdwindowsvmip'
   }
 ]
 
@@ -146,5 +154,8 @@ module az_vm '../../Modules/VM/VM.bicep' = [ for vmconfig in vmconfigs : {
       Environment : envr
     }
     properties: vmconfig.properties
+    nicname: vmconfig.nicname
+    subnetid: vmconfig.subnetid
+    ipconfigname: vmconfig.ipconfigname
   }
 }]
