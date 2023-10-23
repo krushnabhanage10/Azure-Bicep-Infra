@@ -9,30 +9,47 @@ var nsgconfigs = [
             {
                 name: 'Allow_SSH_Port'
                 properties: {
-                    protocol: 'Tcp'
-                    sourcePortRange: '*'
-                    destinationPortRange: '22'
-                    sourceAddressPrefix: 'VirtualNetwork'
-                    destinationAddressPrefix: 'VirtualNetwork'
-                    access: 'Allow'
-                    priority: 105
-                    direction: 'Inbound'
-                    sourcePortRanges: []
-                    destinationPortRanges: []
-                    sourceAddressPrefixes: []
-                    destinationAddressPrefixes: []
+                  priority: 1000
+                  protocol: 'Tcp'
+                  access: 'Allow'
+                  direction: 'Inbound'
+                  sourceAddressPrefix: '*'
+                  sourcePortRange: '*'
+                  destinationAddressPrefix: '*'
+                  destinationPortRange: '22'
+                  sourcePortRanges: []
+                  destinationPortRanges: []
+                  sourceAddressPrefixes: []
+                  destinationAddressPrefixes: []
+                }
+            }
+            {
+                name: 'Allow_RDP_Port'
+                properties: {
+                  priority: 1001
+                  protocol: 'Tcp'
+                  access: 'Allow'
+                  direction: 'Inbound'
+                  sourceAddressPrefix: '*'
+                  sourcePortRange: '*'
+                  destinationAddressPrefix: '*'
+                  destinationPortRange: '3389'
+                  sourcePortRanges: []
+                  destinationPortRanges: []
+                  sourceAddressPrefixes: []
+                  destinationAddressPrefixes: []
                 }
             }
             {
                 name: 'Allow_HTTP_Port'
                 properties: {
-                    protocol: 'TCP'
+                    protocol: 'Tcp'
                     sourcePortRange: '*'
                     destinationPortRange: '80'
                     sourceAddressPrefix: '*'
                     destinationAddressPrefix: '*'
                     access: 'Allow'
-                    priority: 200
+                    priority: 1002
                     direction: 'Inbound'
                     sourcePortRanges: []
                     destinationPortRanges: []
