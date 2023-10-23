@@ -69,6 +69,7 @@ var vmconfigs = [
     nicname: 'dev-linux-vm-20231010'
     subnetid: vmsubnetid
     ipconfigname: 'devlinuxvmip'
+    publicIPAddressName: 'devlinuxvmpublicip'
   }
   {
     name: 'dev-windows-vm-01'
@@ -139,6 +140,7 @@ var vmconfigs = [
     nicname: 'dev-windows-vm-20231010'
     subnetid: vmsubnetid
     ipconfigname: 'devwindowsvmip'
+    publicIPAddressName: 'devwindowsvmpublicip'
   }
 ]
 
@@ -148,6 +150,7 @@ module az_vm '../../Modules/VM/VM.bicep' = [ for vmconfig in vmconfigs : {
   params:{
     name: vmconfig.name
     location: location
+    envr: envr
     tags: {
       CreatedUsing: 'Bicep'
       CreatorBy: 'Krushna'
@@ -157,5 +160,6 @@ module az_vm '../../Modules/VM/VM.bicep' = [ for vmconfig in vmconfigs : {
     nicname: vmconfig.nicname
     subnetid: vmconfig.subnetid
     ipconfigname: vmconfig.ipconfigname
+    publicIPAddressName: vmconfig.publicIPAddressName
   }
 }]
