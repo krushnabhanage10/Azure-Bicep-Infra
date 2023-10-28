@@ -61,13 +61,13 @@ var aksconfigs = [
       }
     }
     nodepoolname: 'nodepool01'
-    nodecount: 2
+    nodecount: 1
     nodesku: 'Standard_D2as_v4'
     nodeosdisksize: 256
     nodedisktype: 'Managed'
     nodepooltype: 'VirtualMachineScaleSets'
-    nodemaxcount: 10
-    nodemincount: 2
+    nodemaxcount: 5
+    nodemincount: 1
     isautoscaling: true
     nodelabels:  {
       'aks-node-env': 'dev-aks-nodes'
@@ -131,13 +131,13 @@ var aksconfigs = [
   //     }
   //   }
   //   nodepoolname: 'nodepool01'
-  //   nodecount: 2
+  //   nodecount: 1
   //   nodesku: 'Standard_D2as_v4'
   //   nodeosdisksize: 256
   //   nodedisktype: 'Managed'
   //   nodepooltype: 'VirtualMachineScaleSets'
-  //   nodemaxcount: 10
-  //   nodemincount: 2
+  //   nodemaxcount: 5
+  //   nodemincount: 1
   //   isautoscaling: true
   //   nodelabels:  {
   //     'aks-node-env': 'dev-aks-nodes'

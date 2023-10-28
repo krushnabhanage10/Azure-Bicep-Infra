@@ -61,7 +61,7 @@ var aksconfigs = [
       }
     }
     nodepoolname: 'nodepool01'
-    nodecount: 2
+    nodecount: 1
     nodesku: 'Standard_D2as_v4'
     nodeosdisksize: 256
     nodedisktype: 'Managed'
@@ -87,7 +87,7 @@ var aksconfigs = [
   //   agentPoolProfiles: [
   //     {
   //       name: 'nodepool01'
-  //       count: 2
+  //       count: 1
   //       vmSize: 'Standard_D2as_v4'
   //       osDiskSizeGB: 256
   //       osDiskType: 'Managed'
@@ -99,8 +99,8 @@ var aksconfigs = [
   //         '1'
   //         '2'
   //       ]
-  //       maxCount: 10
-  //       minCount: 2
+  //       maxCount: 5
+  //       minCount: 1
   //       enableAutoScaling: true
   //       powerState: {
   //         code: 'Running'
@@ -131,13 +131,13 @@ var aksconfigs = [
   //     }
   //   }
   //   nodepoolname: 'nodepool01'
-  //   nodecount: 2
+  //   nodecount: 1
   //   nodesku: 'Standard_D2as_v4'
   //   nodeosdisksize: 256
   //   nodedisktype: 'Managed'
   //   nodepooltype: 'VirtualMachineScaleSets'
-  //   nodemaxcount: 10
-  //   nodemincount: 2
+  //   nodemaxcount: 5
+  //   nodemincount: 1
   //   isautoscaling: true
   //   nodelabels:  {
   //     'aks-node-env': 'prd-aks-nodes'
