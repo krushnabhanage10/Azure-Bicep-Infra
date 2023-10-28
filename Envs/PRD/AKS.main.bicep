@@ -17,7 +17,7 @@ var aksconfigs = [
     agentPoolProfiles: [
       {
         name: 'nodepool01'
-        count: 2
+        count: 1
         vmSize: 'Standard_D2as_v4'
         osDiskSizeGB: 256
         osDiskType: 'Managed'
@@ -29,8 +29,8 @@ var aksconfigs = [
           '1'
           '2'
         ]
-        maxCount: 10
-        minCount: 2
+        maxCount: 5
+        minCount: 1
         enableAutoScaling: true
         powerState: {
           code: 'Running'
