@@ -22,7 +22,40 @@ var aksconfigs = [
         osDiskSizeGB: 256
         osDiskType: 'Managed'
         kubeletDiskType: 'OS'
-        vnetSubnetID: '/subscriptions/4a84c9d0-d7e4-4681-be42-dd358c9f1ea0/resourceGroups/krushna_dev_rg/providers/Microsoft.Network/virtualNetworks/dev_infra_vnet/subnets/dev_subnet_k8s'
+        vnetSubnetID: akssubnetid
+        maxPods: 110
+        type: 'VirtualMachineScaleSets'
+        availabilityZones: [
+          '1'
+          '2'
+        ]
+        maxCount: 5
+        minCount: 1
+        enableAutoScaling: true
+        powerState: {
+          code: 'Running'
+        }
+        orchestratorVersion: '1.27.3'
+        enableNodePublicIP: false
+        nodeLabels: {
+          'aks-node-env': 'dev-aks-nodes'
+        }
+        mode: 'System'
+        enableEncryptionAtHost: false
+        enableUltraSSD: false
+        osType: 'Linux'
+        osSKU: 'Ubuntu'
+        upgradeSettings: {}
+        enableFIPS: false
+      }
+      {
+        name: 'nodepool02'
+        count: 1
+        vmSize: 'Standard_D2as_v4'
+        osDiskSizeGB: 256
+        osDiskType: 'Managed'
+        kubeletDiskType: 'OS'
+        vnetSubnetID: akssubnetid
         maxPods: 110
         type: 'VirtualMachineScaleSets'
         availabilityZones: [
@@ -60,93 +93,43 @@ var aksconfigs = [
         ]
       }
     }
-    nodepoolname: 'nodepool01'
-    nodecount: 1
-    nodesku: 'Standard_D2as_v4'
-    nodeosdisksize: 256
-    nodedisktype: 'Managed'
-    nodepooltype: 'VirtualMachineScaleSets'
-    nodemaxcount: 5
-    nodemincount: 1
-    isautoscaling: true
-    nodelabels:  {
-      'aks-node-env': 'dev-aks-nodes'
-    }
     servicePrincipalProfile: {
       clientId: spnid
       secret: spnsecret
     }
+    aksnodepools: [
+      {
+        nodepoolname: 'nodepool01'
+        nodecount: 1
+        nodesku: 'Standard_D2as_v4'
+        nodeosdisksize: 256
+        nodedisktype: 'Managed'
+        nodepooltype: 'VirtualMachineScaleSets'
+        nodemaxcount: 5
+        nodemincount: 1
+        isautoscaling: true
+        akssubnetid: akssubnetid
+        nodelabels:  {
+          'aks-node-env': 'dev-aks-nodes'
+        }
+      }
+      {
+        nodepoolname: 'nodepool02'
+        nodecount: 1
+        nodesku: 'Standard_D2as_v4'
+        nodeosdisksize: 256
+        nodedisktype: 'Managed'
+        nodepooltype: 'VirtualMachineScaleSets'
+        nodemaxcount: 5
+        nodemincount: 1
+        isautoscaling: true
+        akssubnetid: akssubnetid
+        nodelabels:  {
+          'aks-node-env': 'dev-aks-nodes'
+        }
+      }
+    ]
   }
-  // {
-  //   name: 'dev-aks-app02'
-  //   sku: {
-  //     name: 'Basic'
-  //     tier: 'Paid'
-  //   }
-  //   aksversion: '1.27.3'
-  //   agentPoolProfiles: [
-  //     {
-  //       name: 'nodepool01'
-  //       count: 1
-  //       vmSize: 'Standard_D2as_v4'
-  //       osDiskSizeGB: 256
-  //       osDiskType: 'Managed'
-  //       kubeletDiskType: 'OS'
-  //       vnetSubnetID: '/subscriptions/4a84c9d0-d7e4-4681-be42-dd358c9f1ea0/resourceGroups/krushna_dev_rg/providers/Microsoft.Network/virtualNetworks/dev_infra_vnet/subnets/dev_subnet_k8s'
-  //       maxPods: 110
-  //       type: 'VirtualMachineScaleSets'
-  //       availabilityZones: [
-  //         '1'
-  //         '2'
-  //       ]
-  //       maxCount: 5
-  //       minCount: 1
-  //       enableAutoScaling: true
-  //       powerState: {
-  //         code: 'Running'
-  //       }
-  //       orchestratorVersion: '1.27.3'
-  //       enableNodePublicIP: false
-  //       nodeLabels: {
-  //         'aks-node-env': 'dev-aks-nodes'
-  //       }
-  //       mode: 'System'
-  //       enableEncryptionAtHost: false
-  //       enableUltraSSD: false
-  //       osType: 'Linux'
-  //       osSKU: 'Ubuntu'
-  //       upgradeSettings: {}
-  //       enableFIPS: false
-  //     }
-  //   ]
-  //   akssubnetid: akssubnetid
-  //   linuxProfile: {
-  //     adminUsername: 'dev-aks-app02sshuser'
-  //     ssh: {
-  //       publicKeys: [
-  //         {
-  //           keyData: loadTextContent('dev_ssh_key1.pem')
-  //         }
-  //       ]
-  //     }
-  //   }
-  //   nodepoolname: 'nodepool01'
-  //   nodecount: 1
-  //   nodesku: 'Standard_D2as_v4'
-  //   nodeosdisksize: 256
-  //   nodedisktype: 'Managed'
-  //   nodepooltype: 'VirtualMachineScaleSets'
-  //   nodemaxcount: 5
-  //   nodemincount: 1
-  //   isautoscaling: true
-  //   nodelabels:  {
-  //     'aks-node-env': 'dev-aks-nodes'
-  //   }
-  //   servicePrincipalProfile: {
-  //     clientId: spnid
-  //     secret: spnsecret
-  //   }
-  // }
 ]
 
 module aks '../../Modules/AKS/AKS.bicep' = [ for aksconfig in aksconfigs: {
@@ -163,18 +146,8 @@ module aks '../../Modules/AKS/AKS.bicep' = [ for aksconfig in aksconfigs: {
     sku: aksconfig.sku
     aksversion: aksconfig.aksversion
     agentPoolProfiles: aksconfig.agentPoolProfiles
-    akssubnetid: aksconfig.akssubnetid
     linuxProfile: aksconfig.linuxProfile
-    nodepoolname: aksconfig.nodepoolname
-    nodecount: aksconfig.nodecount
-    nodesku: aksconfig.nodesku
-    nodeosdisksize: aksconfig.nodeosdisksize
-    nodedisktype: aksconfig.nodedisktype
-    nodepooltype: aksconfig.nodepooltype
-    nodemaxcount: aksconfig.nodemaxcount
-    nodemincount: aksconfig.nodemincount
-    isautoscaling: aksconfig.isautoscaling
-    nodelabels: aksconfig.nodelabels
     servicePrincipalProfile : aksconfig.servicePrincipalProfile
+    aksnodepools: aksconfig.aksnodepools
   }
 }]

@@ -5,20 +5,9 @@ param tags object
 param sku object
 param aksversion string
 param agentPoolProfiles array
-param akssubnetid string
 param linuxProfile object
-param nodepoolname string
-param nodecount int
-param nodesku string
-param nodeosdisksize int
-param nodedisktype string
-param nodepooltype string
-param nodemaxcount int
-param nodemincount int
-param isautoscaling bool
-param nodelabels object
 param servicePrincipalProfile object
-
+param aksnodepools array
 
 
 
@@ -102,31 +91,31 @@ resource aks_cluster 'Microsoft.ContainerService/managedClusters@2023-01-02-prev
   }
 }
 
-resource aks_nodepools 'Microsoft.ContainerService/managedClusters/agentPools@2023-01-02-preview' = {
+resource aks_cluster_pools 'Microsoft.ContainerService/managedClusters/agentPools@2023-01-02-preview' = [ for aksnodepool in aksnodepools : {
   parent: aks_cluster
-  name: nodepoolname
+  name: aksnodepool.nodepoolname
   properties: {
-    count: nodecount
-    vmSize: nodesku
-    osDiskSizeGB: nodeosdisksize
-    osDiskType: nodedisktype
+    count: aksnodepool.nodecount
+    vmSize: aksnodepool.nodesku
+    osDiskSizeGB: aksnodepool.nodeosdisksize
+    osDiskType: aksnodepool.nodedisktype
     kubeletDiskType: 'OS'
-    vnetSubnetID: akssubnetid
+    vnetSubnetID: aksnodepool.akssubnetid
     maxPods: 110
-    type: nodepooltype
+    type: aksnodepool.nodepooltype
     availabilityZones: [
       '1'
       '2'
     ]
-    maxCount: nodemaxcount
-    minCount: nodemincount
-    enableAutoScaling: isautoscaling
+    maxCount: aksnodepool.nodemaxcount
+    minCount: aksnodepool.nodemincount
+    enableAutoScaling: aksnodepool.isautoscaling
     powerState: {
       code: 'Running'
     }
     orchestratorVersion: aksversion
     enableNodePublicIP: false
-    nodeLabels: nodelabels
+    nodeLabels: aksnodepool.nodelabels
     mode: 'System'
     enableEncryptionAtHost: false
     enableUltraSSD: false
@@ -135,4 +124,4 @@ resource aks_nodepools 'Microsoft.ContainerService/managedClusters/agentPools@20
     upgradeSettings: {}
     enableFIPS: false
   }
-}
+}]
